@@ -1,7 +1,8 @@
 import { authMiddleware } from "@clerk/nextjs";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-// See https://clerk.com/docs/references/nextjs/auth-middleware
-// for more information about configuring your Middleware
+// Custom middleware wrapper
 export default authMiddleware({
     // Allow signed out users to access the specified routes:
     publicRoutes: [
@@ -14,6 +15,20 @@ export default authMiddleware({
     ],
     // Redirect unauthenticated users to landing page
     signInUrl: '/sign-in',
+    // After authentication check, redirect authenticated users from landing to home
+    afterAuth(auth, req) {
+        const { pathname } = req.nextUrl;
+        
+        // If user is authenticated and on landing page, redirect to /home
+        if (auth.userId && (pathname === '/' || pathname === '/landing')) {
+            const url = req.nextUrl.clone();
+            url.pathname = '/home';
+            return NextResponse.redirect(url);
+        }
+        
+        // Allow the request to continue
+        return NextResponse.next();
+    },
 });
 
 export const config = {

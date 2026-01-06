@@ -21,37 +21,8 @@ export default function LandingPage() {
         );
     }
 
-    // Redirect authenticated users immediately
-    useEffect(() => {
-        if (isLoaded && isSignedIn) {
-            // Use window.location for immediate redirect
-            window.location.href = "/home";
-        }
-    }, [isLoaded, isSignedIn]);
-
-    // Show loading only while checking auth, not during redirect
-    if (!isLoaded) {
-        return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading...</p>
-                </div>
-            </div>
-        );
-    }
-
-    // If signed in, show brief redirect message
-    if (isSignedIn) {
-        return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-gray-600">Redirecting to dashboard...</p>
-                </div>
-            </div>
-        );
-    }
+    // Don't redirect here - middleware handles it
+    // Just show landing page content for unauthenticated users
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
