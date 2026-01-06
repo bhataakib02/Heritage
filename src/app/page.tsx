@@ -135,27 +135,11 @@ export default function LandingPage() {
             {/* Top Navigation Header - Museum Style */}
             <header className="w-full bg-white border-b-2 border-gray-200 shadow-sm py-4 md:py-5">
                 <div className="container mx-auto px-6">
-                    <nav className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold">
-                                <span className="text-amber-600">HERITAGE</span>{" "}
-                                <span className="text-gray-800">WORLD</span>
-                            </h1>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <Link
-                                href="/sign-in"
-                                className="px-4 py-2 text-gray-700 hover:text-primary transition-colors font-medium text-sm md:text-base"
-                            >
-                                Sign In
-                            </Link>
-                            <Link
-                                href="/sign-up"
-                                className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-all font-medium text-sm md:text-base"
-                            >
-                                Sign Up
-                            </Link>
-                        </div>
+                    <nav className="flex items-center justify-center">
+                        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold">
+                            <span className="text-amber-600">HERITAGE</span>{" "}
+                            <span className="text-gray-800">WORLD</span>
+                        </h1>
                     </nav>
                 </div>
             </header>
