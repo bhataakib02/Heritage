@@ -18,7 +18,7 @@ export default function LandingPage() {
                 </div>
             </div>
         );
-    }
+  }
 
     // If somehow an authenticated user reaches here (shouldn't happen due to middleware),
     // redirect immediately without showing content
@@ -39,7 +39,7 @@ export default function LandingPage() {
     // Middleware handles redirect for authenticated users
     // This component only renders for unauthenticated users
 
-    return (
+  return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
             {/* Navigation */}
             <nav className="container mx-auto px-6 py-6 flex justify-between items-center">
@@ -58,7 +58,7 @@ export default function LandingPage() {
                             <Link
                                 href="/bookings"
                                 className="px-6 py-2 text-gray-700 hover:text-primary transition-colors font-medium"
-                            >
+          >
                                 My Bookings
                             </Link>
                         </>
@@ -78,7 +78,7 @@ export default function LandingPage() {
                             </Link>
                         </>
                     )}
-                </div>
+            </div>
             </nav>
 
             {/* Hero Section */}
@@ -87,7 +87,7 @@ export default function LandingPage() {
                     <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
                         Explore Cultural
                         <span className="text-primary block">Heritage</span>
-                    </h1>
+                  </h1>
                     <p className="text-xl text-gray-600 mb-10 leading-relaxed">
                         Discover and book museum events, exhibitions, and cultural heritage experiences.
                         Connect with history, art, and culture in one place.
@@ -198,12 +198,12 @@ export default function LandingPage() {
                                 >
                                     Create Free Account
                                 </Link>
-                                <Link
+                <Link
                                     href="/sign-in"
                                     className="px-8 py-4 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white hover:text-primary transition-all font-semibold text-lg"
-                                >
+                >
                                     Sign In
-                                </Link>
+                </Link>
                             </>
                         )}
                     </div>
@@ -252,14 +252,14 @@ export default function LandingPage() {
                                 <li>support@heritageworld.com</li>
                                 <li>+1 (555) 123-4567</li>
                             </ul>
-                        </div>
-                    </div>
+              </div>
+            </div>
                     <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
                         <p>&copy; 2024 Heritage World. All rights reserved.</p>
-                    </div>
-                </div>
+          </div>
+      </div>
             </footer>
-        </div>
-    );
+    </div>
+  );
 }
 

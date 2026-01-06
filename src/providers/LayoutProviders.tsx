@@ -1,14 +1,14 @@
 'use client'
-import { UserButton } from '@clerk/nextjs'
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
-import { Button } from '@nextui-org/react';
+import { UserButton, useClerk } from '@clerk/nextjs'
 import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 function LayoutProviders({ children }: { children: React.ReactNode }) {
     const [showButtons, setShowButtons] = useState<boolean>(false);
+    const { signOut } = useClerk();
 
     const menusForAdmin = [
         {
@@ -42,7 +42,6 @@ function LayoutProviders({ children }: { children: React.ReactNode }) {
             title: "Home",
             path: "/home",
         },
-
         {
             title: "Bookings",
             path: "/bookings",
@@ -114,32 +113,44 @@ function LayoutProviders({ children }: { children: React.ReactNode }) {
     return (
         <div className="bg-gray-200 lg:px-20 px-5">
             {isPrivateRoute && (
-                <div className="bg-white flex justify-between items-center shadow px-3 py-5">
+                <div className="bg-white flex flex-col md:flex-row justify-between items-center shadow px-3 py-5 gap-4">
                     <h1
-                        className="font-semibold tect-2xl cursor-pointer text-blue-900"
+                        className="font-semibold text-xl md:text-2xl cursor-pointer text-blue-900"
                         onClick={() => router.push("/home")}
                     >HERITAGE WORLD</h1>
 
-                    <div className="flex gap-5 items-center">
-                        <Dropdown size="sm">
-                            <DropdownTrigger>
-                                <Button variant="flat" color="primary" size="sm">Profile</Button>
-                            </DropdownTrigger>
-                            <DropdownMenu aria-label="Static Actions">
-                                {menusToShow.map((menu) => (
-                                    <DropdownItem
-                                        key={menu.title}
-                                        onClick={() => {
-                                            router.push(menu.path);
-                                        }}>
-                                        {menu.title}
-                                    </DropdownItem>
-                                ))}
-                            </DropdownMenu>
-                        </Dropdown>
-                        <UserButton
-                            afterSignOutUrl="/"
-                        />
+                    <div className="flex flex-wrap gap-2 md:gap-4 items-center justify-center">
+                        {/* Navigation Links */}
+                        <nav className="flex flex-wrap gap-2 md:gap-4 items-center">
+                            {menusToShow.map((menu) => (
+                                <Link
+                                    key={menu.title}
+                                    href={menu.path}
+                                    className={`px-3 md:px-4 py-2 rounded-md text-xs md:text-sm font-medium transition-colors whitespace-nowrap ${
+                                        pathname === menu.path
+                                            ? 'bg-primary text-white'
+                                            : 'text-gray-700 hover:bg-gray-100'
+                                    }`}
+                                >
+                                    {menu.title}
+                                </Link>
+                            ))}
+                        </nav>
+
+                        {/* Logout Button */}
+                        <button
+                            onClick={() => signOut({ redirectUrl: '/' })}
+                            className="px-3 md:px-4 py-2 bg-red-500 text-white rounded-md text-xs md:text-sm font-medium hover:bg-red-600 transition-colors whitespace-nowrap"
+                        >
+                            Logout
+                        </button>
+
+                        {/* User Profile Button */}
+                        <div className="flex items-center">
+                            <UserButton
+                                afterSignOutUrl="/"
+                            />
+                        </div>
                     </div>
                 </div>
             )}

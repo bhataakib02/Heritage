@@ -26,7 +26,7 @@ async function BookingsPage() {
   try {
     bookings = await BookingModel.find({
       user: userId,
-    });
+  });
   } catch (error) {
     console.error("Error fetching bookings:", error);
     bookings = [];

@@ -28,7 +28,7 @@ let eventModelInstance: IModel<Event> | null = null;
 
 function getEventModel(): IModel<Event> {
     if (!eventModelInstance) {
-        const supabase = getSupabaseClient();
+const supabase = getSupabaseClient();
         eventModelInstance = new SupabaseModelAdapter<Event>(supabase, 'events', 'id');
     }
     return eventModelInstance;
