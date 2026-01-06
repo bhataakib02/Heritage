@@ -72,8 +72,16 @@ export default function LandingPage() {
                     success: response.data.success,
                     eventCount: fetchedEvents.length,
                     timestamp: response.data.timestamp,
-                    requestId: response.data.requestId
+                    requestId: response.data.requestId,
+                    dbInfo: response.data._dbInfo,
+                    fetchedAt: response.data.fetchedAt
                 });
+                if (fetchedEvents.length > 0) {
+                    console.warn("⚠️ WARNING: Database contains", fetchedEvents.length, "event(s)!");
+                    console.warn("⚠️ Event names:", fetchedEvents.map((e: Event) => e.name));
+                    console.warn("⚠️ Database:", response.data._dbInfo);
+                    console.warn("⚠️ To fix: Delete events from Supabase dashboard or admin panel");
+                }
                 
                 // If no events and searchName is set, clear it
                 if (fetchedEvents.length === 0 && searchName) {

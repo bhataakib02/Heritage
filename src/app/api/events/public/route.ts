@@ -16,14 +16,31 @@ export async function GET(request: Request) {
         // Force fresh database connection - reconnect every time
         await connectDB();
         
+        // Log database connection info (safely - don't expose full keys)
+        const supabaseUrl = process.env.SUPABASE_URL || 'NOT_SET';
+        const dbInfo = supabaseUrl.includes('supabase.co') 
+            ? supabaseUrl.split('//')[1]?.split('.')[0] || 'unknown'
+            : 'local/dev';
+        console.log(`[API] ========================================`);
+        console.log(`[API] Database: ${dbInfo} (${supabaseUrl.substring(0, 30)}...)`);
+        console.log(`[API] Time: ${new Date().toISOString()}`);
+        
         // Get fresh data from database - ALWAYS query fresh
         const events = await EventModel.find({}, {
             sort: { created_at: -1 }
         });
         
         // Log what we're actually returning
-        console.log(`[API] Fetched ${events?.length || 0} events from database at ${new Date().toISOString()}`);
-        console.log(`[API] Event IDs:`, events.map(e => e._id || e.id));
+        console.log(`[API] Fetched ${events?.length || 0} events from database`);
+        if (events && events.length > 0) {
+            console.log(`[API] Event IDs:`, events.map(e => e.id || e._id));
+            console.log(`[API] Event Names:`, events.map(e => e.name));
+            console.warn(`[API] ⚠️ WARNING: Database contains ${events.length} event(s)!`);
+            console.warn(`[API] ⚠️ To clear: Delete events from Supabase dashboard or use admin panel`);
+        } else {
+            console.log(`[API] ✅ Database is empty - returning empty array`);
+        }
+        console.log(`[API] ========================================`);
         
         // Add timestamp to response to ensure uniqueness
         const timestamp = Date.now();
@@ -38,7 +55,8 @@ export async function GET(request: Request) {
             requestId: randomId,
             fetchedAt: requestTime,
             eventCount: events?.length || 0,
-            _cacheBuster: `v${timestamp}-${randomId}` // Additional cache buster
+            _cacheBuster: `v${timestamp}-${randomId}`, // Additional cache buster
+            _dbInfo: dbInfo // Include database identifier (safe)
         };
         
         // Return with aggressive no-cache headers to prevent ALL caching

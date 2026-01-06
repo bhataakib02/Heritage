@@ -76,7 +76,7 @@ function Tickets({
           </div>
 
           <div className="space-y-3">
-            {event.ticketTypes.map((ticketType: any, index: number) => (
+          {event.ticketTypes.map((ticketType: any, index: number) => (
               <div className="bg-white border border-gray-200 p-4 rounded-lg" key={index}>
                 <div className="grid grid-cols-4 gap-4 items-start">
                   <div className="flex flex-col gap-2">
@@ -115,16 +115,16 @@ function Tickets({
                       <SelectItem key="Custom" value="Custom">Custom Type</SelectItem>
                     </Select>
                     {ticketType.name === "Custom" && (
-                      <Input
+              <Input
                         placeholder="Enter custom ticket type name"
                         value={ticketType.customName || ""}
-                        onChange={(e) =>
-                          onTicketPropertyChange({
-                            index,
+                onChange={(e) =>
+                  onTicketPropertyChange({
+                    index,
                             property: "customName",
-                            value: e.target.value,
-                          })
-                        }
+                    value: e.target.value,
+                  })
+                }
                         size="sm"
                         classNames={{
                           input: "text-base",
@@ -132,34 +132,34 @@ function Tickets({
                       />
                     )}
                   </div>
-                  <Input
+              <Input
                     placeholder="0"
-                    onChange={(e) =>
-                      onTicketPropertyChange({
-                        index,
-                        property: "price",
+                onChange={(e) =>
+                  onTicketPropertyChange({
+                    index,
+                    property: "price",
                         value: Number(e.target.value) || 0,
-                      })
-                    }
+                  })
+                }
                     value={ticketType.price || ""}
-                    type="number"
+                type="number"
                     size="sm"
                     startContent={<span className="text-gray-500">₹</span>}
                     classNames={{
                       input: "text-base",
                     }}
-                  />
-                  <Input
+              />
+              <Input
                     placeholder="Unlimited"
-                    onChange={(e) =>
-                      onTicketPropertyChange({
-                        index,
-                        property: "limit",
+                onChange={(e) =>
+                  onTicketPropertyChange({
+                    index,
+                    property: "limit",
                         value: Number(e.target.value) || 0,
-                      })
-                    }
+                  })
+                }
                     value={ticketType.limit || ""}
-                    type="number"
+                type="number"
                     size="sm"
                     description="0 = Unlimited"
                     classNames={{
@@ -175,11 +175,11 @@ function Tickets({
                       size="sm"
                     >
                       <i className="ri-delete-bin-line text-lg"></i>
-                    </Button>
+              </Button>
                   </div>
                 </div>
-              </div>
-            ))}
+            </div>
+          ))}
           </div>
         </div>
       )}
