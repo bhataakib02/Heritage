@@ -179,7 +179,7 @@ export default function LandingPage() {
 
                     {/* Featured Museum Images - Always show 3 beautiful museum images */}
                     <div className="max-w-6xl mx-auto mt-12">
-                        <div className="grid md:grid-cols-3 gap-4">
+                        <div className="grid md:grid-cols-3 gap-6">
                             {featuredMuseumImages.map((imageUrl, index) => (
                                 <div
                                     key={index}
@@ -190,13 +190,14 @@ export default function LandingPage() {
                                             src={imageUrl}
                                             alt={`Museum ${index + 1}`}
                                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                                            loading="lazy"
-                                            width={800}
-                                            height={600}
-                                            quality={95}
+                                            loading="eager"
+                                            width={1200}
+                                            height={800}
                                             style={{
-                                                imageRendering: 'high-quality',
-                                                objectFit: 'cover'
+                                                imageRendering: 'auto',
+                                                objectFit: 'cover',
+                                                minHeight: '100%',
+                                                minWidth: '100%'
                                             }}
                                             onError={(e) => {
                                                 // Fallback to placeholder if image not found
@@ -326,106 +327,88 @@ export default function LandingPage() {
                 </div>
             </section>
 
-            {/* Museums Section */}
-            <section id="museums-section" className="py-16 md:py-24 bg-white">
-                <div className="container mx-auto px-6">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                            {searchName ? `Selected Museum: ${searchName}` : "Explore Our Museums"}
-                        </h2>
-                        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                            {searchName 
-                                ? "Book your tickets for this museum" 
-                                : "Select a museum from the search above to view details"}
-                        </p>
-                    </div>
+            {/* Museums Section - Only visible when museum is selected */}
+            {searchName && (
+                <section id="museums-section" className="py-16 md:py-24 bg-white">
+                    <div className="container mx-auto px-6">
+                        <div className="text-center mb-12">
+                            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                                Selected Museum: {searchName}
+                            </h2>
+                            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                                Book your tickets for this museum
+                            </p>
+                        </div>
 
-                    {loading ? (
-                        <div className="text-center py-12">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                            <p className="text-gray-600">Loading museums...</p>
-                        </div>
-                    ) : events.length === 0 ? (
-                        <div className="text-center py-12">
-                            <p className="text-gray-600 text-lg mb-4">
-                                No museums available at the moment.
-                            </p>
-                            <Link
-                                href="/sign-up"
-                                className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all font-semibold inline-block"
-                            >
-                                Sign Up to Add Museums
-                            </Link>
-                        </div>
-                    ) : searchName && filteredEvents.length > 0 ? (
-                        // Show only selected museum
-                        <div className="max-w-4xl mx-auto">
-                            {filteredEvents.map((event) => (
-                                <div
-                                    key={event.id || event._id}
-                                    className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all border border-gray-100 overflow-hidden"
-                                >
-                                    <div className="h-64 md:h-80 bg-gray-200 overflow-hidden">
-                                        <img
-                                            src={event.images?.[0] || '/placeholder-image.jpg'}
-                                            alt={event.name}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-                                    <div className="p-8">
-                                        <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-                                            {event.name}
-                                        </h3>
-                                        <p className="text-gray-600 mb-6 leading-relaxed">
-                                            {event.description}
-                                        </p>
-                                        <div className="space-y-3 mb-6 text-gray-700">
-                                            <div className="flex items-center gap-2 text-lg">
-                                                <i className="ri-map-pin-line text-primary text-xl"></i>
-                                                <span className="font-semibold">{event.location}</span>
-                                            </div>
-                                            <div className="flex items-center gap-2 text-lg">
-                                                <i className="ri-calendar-line text-primary text-xl"></i>
-                                                <span className="font-semibold">{event.date} at {event.time}</span>
-                                            </div>
+                        {loading ? (
+                            <div className="text-center py-12">
+                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                                <p className="text-gray-600">Loading museum...</p>
+                            </div>
+                        ) : filteredEvents.length > 0 ? (
+                            // Show only selected museum
+                            <div className="max-w-4xl mx-auto">
+                                {filteredEvents.map((event) => (
+                                    <div
+                                        key={event.id || event._id}
+                                        className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all border border-gray-100 overflow-hidden"
+                                    >
+                                        <div className="h-64 md:h-80 bg-gray-200 overflow-hidden">
+                                            <img
+                                                src={event.images?.[0] || '/placeholder-image.jpg'}
+                                                alt={event.name}
+                                                className="w-full h-full object-cover"
+                                            />
                                         </div>
-                                        <Link
-                                            href="/sign-up"
-                                            className="block w-full text-center px-6 py-4 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all font-semibold text-lg shadow-lg hover:shadow-xl"
-                                        >
-                                            Create Account to Book Tickets
-                                        </Link>
-                                        <p className="text-center text-sm text-gray-500 mt-4">
-                                            Already have an account? <Link href="/sign-in" className="text-primary hover:underline">Sign In</Link>
-                                        </p>
+                                        <div className="p-8">
+                                            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                                                {event.name}
+                                            </h3>
+                                            <p className="text-gray-600 mb-6 leading-relaxed">
+                                                {event.description}
+                                            </p>
+                                            <div className="space-y-3 mb-6 text-gray-700">
+                                                <div className="flex items-center gap-2 text-lg">
+                                                    <i className="ri-map-pin-line text-primary text-xl"></i>
+                                                    <span className="font-semibold">{event.location}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 text-lg">
+                                                    <i className="ri-calendar-line text-primary text-xl"></i>
+                                                    <span className="font-semibold">{event.date} at {event.time}</span>
+                                                </div>
+                                            </div>
+                                            <Link
+                                                href="/sign-up"
+                                                className="block w-full text-center px-6 py-4 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all font-semibold text-lg shadow-lg hover:shadow-xl"
+                                            >
+                                                Create Account to Book Tickets
+                                            </Link>
+                                            <p className="text-center text-sm text-gray-500 mt-4">
+                                                Already have an account? <Link href="/sign-in" className="text-primary hover:underline">Sign In</Link>
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
-                        </div>
-                    ) : searchName && filteredEvents.length === 0 ? (
-                        <div className="text-center py-12">
-                            <p className="text-gray-600 text-lg mb-4">
-                                No museum found matching "{searchName}". Please try another search.
-                            </p>
-                            <button
-                                onClick={() => {
-                                    setSearchName("");
-                                    setSearchDate("");
-                                }}
-                                className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all font-semibold"
-                            >
-                                Clear Search
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="text-center py-12">
-                            <p className="text-gray-600 text-lg mb-4">
-                                Please select a museum from the search bar above to view details and book tickets.
-                            </p>
-                        </div>
-                    )}
-                </div>
-            </section>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center py-12">
+                                <p className="text-gray-600 text-lg mb-4">
+                                    No museum found matching "{searchName}". Please try another search.
+                                </p>
+                                <button
+                                    onClick={() => {
+                                        setSearchName("");
+                                        setSearchDate("");
+                                    }}
+                                    className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all font-semibold"
+                                >
+                                    Clear Search
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </section>
+            )}
 
             {/* Features Section */}
             <section className="py-16 md:py-24 bg-gray-50">
