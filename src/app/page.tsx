@@ -47,7 +47,7 @@ export default function LandingPage() {
     }
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
             {/* Sticky Navigation */}
             <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
                 scrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
@@ -74,13 +74,12 @@ export default function LandingPage() {
             </nav>
 
             {/* Hero Section */}
-            <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden bg-cover bg-center bg-fixed" style={{
-                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')`
-            }}>
+            <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden bg-gradient-to-br from-primary/20 via-purple-500/20 to-pink-500/20">
                 {/* Background decoration */}
                 <div className="absolute inset-0 overflow-hidden">
-                    <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
-                    <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
+                    <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-400/30 rounded-full blur-3xl"></div>
+                    <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-400/30 rounded-full blur-3xl"></div>
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-400/20 rounded-full blur-3xl"></div>
                 </div>
                 
                 <div className="container mx-auto px-6 text-center relative z-10">
@@ -91,12 +90,12 @@ export default function LandingPage() {
                             <span>Trusted by 10,000+ Cultural Enthusiasts</span>
                         </div>
                         
-                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight animate-fade-in-up drop-shadow-lg">
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-gray-900 mb-6 leading-tight animate-fade-in-up">
                             Explore Cultural
                             <span className="text-primary block mt-2">Heritage</span>
                         </h1>
                         
-                        <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed max-w-3xl mx-auto animate-fade-in-up delay-100 drop-shadow-md">
+                        <p className="text-xl md:text-2xl text-gray-700 mb-10 leading-relaxed max-w-3xl mx-auto animate-fade-in-up delay-100">
                             Discover and book museum events, exhibitions, and cultural heritage experiences.
                             Connect with history, art, and culture in one place.
                         </p>
@@ -121,15 +120,15 @@ export default function LandingPage() {
                         <div className="grid grid-cols-3 gap-6 md:gap-12 max-w-2xl mx-auto mt-16 animate-fade-in-up delay-300">
                             <div className="text-center">
                                 <div className="text-3xl md:text-4xl font-bold text-primary mb-2">500+</div>
-                                <div className="text-sm md:text-base text-gray-600">Museums</div>
+                                <div className="text-sm md:text-base text-gray-700">Museums</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">10K+</div>
-                                <div className="text-sm md:text-base text-gray-600">Users</div>
+                                <div className="text-3xl md:text-4xl font-bold text-purple-600 mb-2">10K+</div>
+                                <div className="text-sm md:text-base text-gray-700">Users</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">50K+</div>
-                                <div className="text-sm md:text-base text-gray-600">Bookings</div>
+                                <div className="text-3xl md:text-4xl font-bold text-pink-600 mb-2">50K+</div>
+                                <div className="text-sm md:text-base text-gray-700">Bookings</div>
                             </div>
                         </div>
                     </div>
