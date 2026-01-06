@@ -77,9 +77,21 @@ function LayoutProviders({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         if (isPrivateRoute) {
-            getUserData();
+            // Add timeout to prevent infinite loading
+            const timeoutId = setTimeout(() => {
+                // If getUserData takes too long, set default menus
+                if (menusToShow.length === 0) {
+                    setMenusToShow(menusForUser);
+                }
+            }, 5000); // 5 second timeout
+            
+            getUserData().finally(() => {
+                clearTimeout(timeoutId);
+            });
+            
+            return () => clearTimeout(timeoutId);
         }
-    }, []);
+    }, [isPrivateRoute]);
 
     const handleToggleButtons = (e: React.MouseEvent) => {
         // Prevent the event from propagating to the document

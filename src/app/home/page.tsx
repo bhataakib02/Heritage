@@ -10,7 +10,8 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-connectDB();
+// Don't call connectDB at module level - it can cause issues
+// connectDB();
 
 interface Props {
   searchParams: {
@@ -28,17 +29,24 @@ export default async function Home({ searchParams }: Props) {
     redirect("/");
   }
 
+  // Connect to DB only when needed (non-blocking)
+  connectDB().catch(error => {
+    console.error("Database connection error:", error);
+  });
+
+  // Handle user registration in background (don't block page load)
   try {
     await handleNewUserRegistration();
   } catch (error) {
-    // Silently handle registration errors (user might not be logged in)
+    // Silently handle registration errors
     console.log("User registration check:", error);
   }
 
+  // Get user ID (non-blocking)
   try {
     await getUserIdOfLoggedInUser();
   } catch (error) {
-    // Silently handle - user might not be logged in yet
+    // Silently handle
     console.log("User ID check:", error);
   }
 
