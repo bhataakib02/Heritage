@@ -22,7 +22,7 @@ async function BookingsPage() {
     );
   }
   
-  let bookings = [];
+  let bookings: any[] = [];
   try {
     bookings = await BookingModel.find({
       user: userId,
@@ -34,7 +34,7 @@ async function BookingsPage() {
   
   // Populate events manually (Supabase doesn't have .populate())
   const eventIds = Array.from(new Set(bookings.map((b: any) => b.event).filter(Boolean)));
-  const events = [];
+  const events: any[] = [];
   for (const eventId of eventIds) {
     const event = await EventModel.findById(eventId);
     if (event) events.push(event);
