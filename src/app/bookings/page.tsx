@@ -69,7 +69,7 @@ async function BookingsPage() {
               className="border border-gray-300 bg-gray-100 flex flex-col gap-5"
             >
               <div className="bg-gray-700 p-3 text-white ">
-                <h1 className="text-2xl font-semibold">{(typeof booking?.event === 'object' ? booking.event?.name : null) || "Event name not available"}</h1>
+                <h1 className="text-2xl font-semibold">{(typeof booking?.event === 'object' ? booking.event?.name : null) || "Museum name not available"}</h1>
                 <div className="text-sm flex gap-10 text-gray-200">
                   <h1>
                     <i className="ri-map-pin-line pr-2"></i> {(typeof booking?.event === 'object' ? booking.event?.location : null) || "Location not available"}

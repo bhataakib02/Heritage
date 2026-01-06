@@ -23,22 +23,22 @@ function Filters() {
     return (
         <div className="bg-white p-5 rounded-sm mb-5 flex flex-col md:flex-row gap-5 md:items-end">
             <div className="w-full">
-                <h1 className="text-sm text-gray-500">Search for an museum by name</h1>
+                <h1 className="text-sm text-gray-500">Search for a museum by name</h1>
                 <input
                     type="text"
                     value={filters.name}
                     onChange={(e) => setFilters({ ...filters, name: e.target.value })}
-                    placeholder="Search for an museum"
+                    placeholder="Search for a museum"
                     className="w-full p-2 rounded-sm border border-gray-400"
                 />
             </div>
             <div className="w-full">
-                <h1 className="text-sm text-gray-500">Search for an museum by date</h1>
+                <h1 className="text-sm text-gray-500">Search for a museum by date</h1>
                 <input
                     type="date"
                     value={filters.date}
                     onChange={(e) => setFilters({ ...filters, date: e.target.value })}
-                    placeholder="Search for an museum"
+                    placeholder="Search for a museum"
                     className="w-full p-2 rounded-sm border border-gray-400"
                 />
             </div>

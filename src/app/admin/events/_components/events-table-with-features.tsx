@@ -92,10 +92,10 @@ function EventsTableWithFeatures({ events }: { events: EventType[] }) {
             setLoading(true);
             setSelectedIdToDelete(eventToDelete.id);
             await axios.delete(`/api/admin/events/${eventToDelete.id}`);
-            toast.success("Event Deleted Successfully");
+            toast.success("Museum Deleted Successfully");
             router.refresh();
         } catch (error: any) {
-            toast.error(error.message || "Failed to delete event");
+            toast.error(error.message || "Failed to delete museum");
         } finally {
             setSelectedIdToDelete("");
             setLoading(false);
@@ -110,11 +110,11 @@ function EventsTableWithFeatures({ events }: { events: EventType[] }) {
             await Promise.all(
                 Array.from(selectedEvents).map(id => axios.delete(`/api/admin/events/${id}`))
             );
-            toast.success(`${selectedEvents.size} event(s) deleted successfully`);
+            toast.success(`${selectedEvents.size} museum(s) deleted successfully`);
             setSelectedEvents(new Set());
             router.refresh();
         } catch (error: any) {
-            toast.error(error.message || "Failed to delete events");
+            toast.error(error.message || "Failed to delete museums");
         } finally {
             setBulkDeleteLoading(false);
             setShowBulkConfirmDialog(false);
@@ -148,7 +148,7 @@ function EventsTableWithFeatures({ events }: { events: EventType[] }) {
                     setEventToDelete(null);
                 }}
                 onConfirm={onDelete}
-                title="Delete Event"
+                title="Delete Museum"
                 message={`Are you sure you want to delete "${eventToDelete?.name}"? This action cannot be undone.`}
                 confirmText="Delete"
                 cancelText="Cancel"
@@ -159,8 +159,8 @@ function EventsTableWithFeatures({ events }: { events: EventType[] }) {
                 isOpen={showBulkConfirmDialog}
                 onClose={() => setShowBulkConfirmDialog(false)}
                 onConfirm={handleBulkDelete}
-                title="Delete Selected Events"
-                message={`Are you sure you want to delete ${selectedEvents.size} event(s)? This action cannot be undone.`}
+                title="Delete Selected Museums"
+                message={`Are you sure you want to delete ${selectedEvents.size} museum(s)? This action cannot be undone.`}
                 confirmText="Delete"
                 cancelText="Cancel"
                 variant="danger"
@@ -175,20 +175,20 @@ function EventsTableWithFeatures({ events }: { events: EventType[] }) {
             <div className="mb-5 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
                 <div className="flex-1">
                     <SearchBar
-                        placeholder="Search events by name, organizer, or location..."
+                        placeholder="Search museums by name, organizer, or location..."
                         onSearch={setSearchTerm}
                     />
                 </div>
                 <ExportButton
                     data={sortedEvents}
-                    filename="events"
+                    filename="museums"
                     headers={["Name", "Organizer", "Date", "Time", "Location"]}
                     fields={["name", "organizer", "date", "time", "location"]}
                 />
             </div>
 
             <div className="bg-white rounded-sm border border-gray-200 overflow-hidden shadow-sm">
-                <Table aria-label="Events table" removeWrapper>
+                <Table aria-label="Museums table" removeWrapper>
                     <TableHeader>
                         <TableColumn className="bg-gray-700 text-white font-semibold w-12">
                             <input
@@ -284,7 +284,7 @@ function EventsTableWithFeatures({ events }: { events: EventType[] }) {
                                                     router.push(`/admin/events/edit-event/${eventId}`)
                                                 }
                                                 className="bg-blue-100 hover:bg-blue-200 text-blue-700"
-                                                aria-label="Edit event"
+                                                aria-label="Edit museum"
                                             >
                                                 <i className="ri-pencil-line"></i>
                                             </Button>
@@ -295,7 +295,7 @@ function EventsTableWithFeatures({ events }: { events: EventType[] }) {
                                                 onClick={() => handleDeleteClick(eventId, event.name)}
                                                 isLoading={loading && selectedIdToDelete === eventId}
                                                 className="bg-red-100 hover:bg-red-200 text-red-700"
-                                                aria-label="Delete event"
+                                                aria-label="Delete museum"
                                             >
                                                 {selectedIdToDelete !== eventId && (
                                                     <i className="ri-delete-bin-line"></i>

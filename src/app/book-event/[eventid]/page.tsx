@@ -18,8 +18,8 @@ async function BookEventPage({ params }: Props) {
   if (!eventData) {
     return (
       <div className="bg-white p-5 text-center">
-        <h1 className="text-2xl font-semibold text-red-500">Event not found</h1>
-        <p className="text-gray-500 mt-2">The event you're looking for doesn't exist.</p>
+        <h1 className="text-2xl font-semibold text-red-500">Museum not found</h1>
+        <p className="text-gray-500 mt-2">The museum you're looking for doesn't exist.</p>
       </div>
     );
   }
@@ -75,7 +75,7 @@ async function BookEventPage({ params }: Props) {
               <img
                 key={index}
                 src={image}
-                alt="Picture of the event"
+                alt="Picture of the museum"
                 height={100}
                 width={300}
                 className="rounded-l-sm"

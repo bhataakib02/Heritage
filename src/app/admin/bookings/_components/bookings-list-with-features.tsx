@@ -88,7 +88,7 @@ function BookingsListWithFeatures({ bookings }: { bookings: BookingType[] }) {
 
     // Prepare export data
     const exportData = filteredBookings.map((booking: any) => ({
-        "Event Name": (booking.event as any)?.name || "N/A",
+        "Museum Name": (booking.event as any)?.name || "N/A",
         "User Name": (booking.user as any)?.userName || "N/A",
         "User Email": (booking.user as any)?.email || "N/A",
         "Ticket Type": booking.ticketType,
@@ -104,7 +104,7 @@ function BookingsListWithFeatures({ bookings }: { bookings: BookingType[] }) {
             <div className="mb-5 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
                 <div className="flex-1">
                     <SearchBar
-                        placeholder="Search bookings by event, user, or payment ID..."
+                        placeholder="Search bookings by museum, user, or payment ID..."
                         onSearch={setSearchTerm}
                     />
                 </div>
@@ -130,7 +130,7 @@ function BookingsListWithFeatures({ bookings }: { bookings: BookingType[] }) {
                         <div className="bg-gray-700 p-4 text-white flex md:flex-row flex-col justify-between md:items-center">
                             <div className="lg:w-full">
                                 <h1 className="md:text-2xl text-xl font-semibold w-full">
-                                    {(typeof booking?.event === 'object' && booking?.event?.name) || "Event name not available"}
+                                    {(typeof booking?.event === 'object' && booking?.event?.name) || "Museum name not available"}
                                 </h1>
                                 <div className="text-sm flex md:flex-row flex-col gap-5 md:gap-10 text-gray-200">
                                     <h1>

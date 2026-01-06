@@ -73,7 +73,7 @@ async function BookingsPage() {
             
             return {
                 ...booking,
-                event: eventMap.get(eventId) || { id: eventId, name: "Event not found", location: "N/A", date: "N/A", time: "N/A" },
+                event: eventMap.get(eventId) || { id: eventId, name: "Museum not found", location: "N/A", date: "N/A", time: "N/A" },
                 user: userMap.get(userId) || { id: userId, userName: "User not found" },
                 _id: booking.id || booking._id,
                 createdAt: booking.created_at || booking.createdAt
