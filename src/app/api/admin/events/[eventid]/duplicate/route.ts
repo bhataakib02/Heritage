@@ -11,8 +11,8 @@ export async function POST(
     { params }: { params: { eventid: string } }
 ) {
     try {
-        const { userId } = auth();
-        if (!userId)
+        const { userId: clerkUserId } = auth();
+        if (!clerkUserId)
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
         const originalEvent = await EventModel.findById(params.eventid);

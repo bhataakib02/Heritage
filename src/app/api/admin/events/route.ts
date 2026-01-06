@@ -8,8 +8,8 @@ connectDB();
 
 export async function POST(request: NextRequest) {
     try {
-        const { userId } = auth();
-        if (!userId)
+        const { userId: clerkUserId } = auth();
+        if (!clerkUserId)
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
         const userId = await getUserIdOfLoggedInUser();
