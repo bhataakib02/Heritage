@@ -1,5 +1,5 @@
 'use client'
-import { UserButton, useClerk } from '@clerk/nextjs'
+import { UserButton } from '@clerk/nextjs'
 import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import axios from 'axios';
@@ -8,7 +8,6 @@ import Link from 'next/link';
 
 function LayoutProviders({ children }: { children: React.ReactNode }) {
     const [showButtons, setShowButtons] = useState<boolean>(false);
-    const { signOut } = useClerk();
 
     const menusForAdmin = [
         {
@@ -122,9 +121,9 @@ function LayoutProviders({ children }: { children: React.ReactNode }) {
                     <div className="flex flex-wrap gap-2 md:gap-4 items-center justify-center">
                         {/* Navigation Links */}
                         <nav className="flex flex-wrap gap-2 md:gap-4 items-center">
-                            {menusToShow.map((menu) => (
+                                {menusToShow.map((menu) => (
                                 <Link
-                                    key={menu.title}
+                                        key={menu.title}
                                     href={menu.path}
                                     className={`px-3 md:px-4 py-2 rounded-md text-xs md:text-sm font-medium transition-colors whitespace-nowrap ${
                                         pathname === menu.path
@@ -132,18 +131,10 @@ function LayoutProviders({ children }: { children: React.ReactNode }) {
                                             : 'text-gray-700 hover:bg-gray-100'
                                     }`}
                                 >
-                                    {menu.title}
+                                        {menu.title}
                                 </Link>
-                            ))}
+                                ))}
                         </nav>
-
-                        {/* Logout Button */}
-                        <button
-                            onClick={() => signOut({ redirectUrl: '/' })}
-                            className="px-3 md:px-4 py-2 bg-red-500 text-white rounded-md text-xs md:text-sm font-medium hover:bg-red-600 transition-colors whitespace-nowrap"
-                        >
-                            Logout
-                        </button>
 
                         {/* User Profile Button */}
                         <div className="flex items-center">
