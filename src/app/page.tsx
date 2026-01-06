@@ -132,13 +132,28 @@ export default function LandingPage() {
 
     return (
         <div className="min-h-screen bg-white">
-            {/* Hero Section with Museum Images - Full Width at Top */}
+            {/* Top Header with HERITAGE WORLD Logo */}
+            <header className="w-full bg-gradient-to-r from-primary via-blue-600 to-purple-600 py-6 md:py-8 shadow-lg">
+                <div className="container mx-auto px-6">
+                    <div className="text-center">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg mb-2">
+                            <span className="text-yellow-300">HERITAGE</span>{" "}
+                            <span className="text-white">WORLD</span>
+                        </h1>
+                        <p className="text-white/90 text-sm md:text-base font-medium">
+                            Explore Cultural Heritage & Museum Experiences
+                        </p>
+                    </div>
+                </div>
+            </header>
+
+            {/* Hero Section with Museum Images - Full Width */}
             <section className="relative pt-12 pb-12 md:pt-16 md:pb-16 bg-gradient-to-br from-blue-50 via-white to-purple-50 w-full">
                 <div className="container mx-auto px-6">
                     <div className="max-w-4xl mx-auto text-center mb-8">
-                        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
+                        <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
                             Discover Cultural Heritage
-                        </h1>
+                        </h2>
                         <p className="text-xl text-gray-600 mb-6">
                             Book museum events, exhibitions, and cultural experiences
                         </p>
