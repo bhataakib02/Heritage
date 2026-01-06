@@ -67,10 +67,6 @@ pnpm dev
 - `npm run build` - Build for production
 - `npm run start` - Start production server
 - `npm run lint` - Run ESLint
-- `npm run migrate:supabase` - Run Supabase migration
-- `npm run make-admin` - Make a user admin
-- `npm run add-dummy-data` - Add dummy data for testing
-- `npm run add-dummy-bookings` - Add dummy bookings for testing
 
 ### Environment Variables
 
@@ -146,7 +142,6 @@ Heritage-app-main/
 │   ├── lib/              # Library code and database adapters
 │   ├── models/           # Data models
 │   └── providers/        # React context providers
-├── scripts/              # Utility scripts for migrations and data management
 ├── public/               # Static assets
 ├── supabase-schema.sql   # Database schema
 ├── supabase-rls-policies.sql  # Row Level Security policies

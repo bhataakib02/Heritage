@@ -6,11 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "migrate:supabase": "tsx scripts/migrate-to-supabase.ts",
-    "make-admin": "tsx scripts/make-user-admin.ts",
-    "add-dummy-data": "tsx scripts/add-dummy-data.ts",
-    "add-dummy-bookings": "tsx scripts/add-dummy-bookings.ts"
+    "lint": "next lint"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.26.1",
