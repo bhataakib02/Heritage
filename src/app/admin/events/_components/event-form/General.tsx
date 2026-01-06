@@ -90,12 +90,14 @@ function General({
       <Textarea
         placeholder="Describe the museum's history, mission, collections, and key highlights. Include information about permanent and temporary exhibitions, special programs, and what makes this museum unique."
         label="Museum Description"
-        description="Comprehensive description of the museum (minimum 100 characters recommended)"
+        description={`Comprehensive description of the museum (minimum 20 characters required, ${event?.description?.length || 0} characters entered)`}
         {...getCommonProps("description")}
         minRows={5}
         classNames={{
           input: "text-base",
         }}
+        errorMessage={event?.description && event.description.trim().length < 20 ? "Description must be at least 20 characters" : undefined}
+        isInvalid={event?.description ? event.description.trim().length < 20 : false}
       />
 
       <div>
@@ -142,15 +144,28 @@ function General({
       <div className="flex justify-between items-center pt-4 border-t">
         <div></div>
         <Button
-          onClick={() => setActiveStep(activeStep + 1)}
+          onClick={() => {
+            if (event?.name && event?.organizer && event?.description && event.description.trim().length >= 20) {
+              setActiveStep(activeStep + 1);
+            }
+          }}
           color="primary"
           size="lg"
-          isDisabled={!event?.name || !event?.organizer || !event?.description || (event?.description?.length < 50)}
+          isDisabled={!event?.name?.trim() || !event?.organizer?.trim() || !event?.description?.trim() || (event?.description?.trim().length < 20)}
           className="font-semibold px-8"
         >
           Continue to Location →
         </Button>
       </div>
+      
+      {(!event?.name?.trim() || !event?.organizer?.trim() || !event?.description?.trim() || (event?.description?.trim().length < 20)) && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mt-2">
+          <p className="text-xs text-yellow-800">
+            <i className="ri-information-line mr-1"></i>
+            Please fill in all required fields. Description must be at least 20 characters.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
