@@ -52,8 +52,10 @@ function Media({
             ref={uploadFilesRef}
             hidden
             onChange={onFileSelect}
+            accept="image/*"
+            multiple
           />
-          Upload New Image
+          Upload Museum Images
         </Button>
       </div>
       {/* // show the newly selected images */}

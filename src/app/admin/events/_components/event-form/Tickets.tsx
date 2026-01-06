@@ -54,7 +54,7 @@ function Tickets({
       {event.ticketTypes && event.ticketTypes.length > 0 && (
         <div className="flex flex-col gap-2">
           <div className="grid grid-cols-4 font-semibold rounded justify-between p-2 gap-5">
-            {["Name", "Price", "Limit", ""].map((item, index) => (
+            {["Ticket Type", "Price (₹)", "Daily Capacity", ""].map((item, index) => (
               <h1 key={index} className="font-semibold">
                 {item}
               </h1>
@@ -64,7 +64,7 @@ function Tickets({
           {event.ticketTypes.map((ticketType: any, index: number) => (
             <div className="grid grid-cols-4 gap-5" key={index}>
               <Input
-                placeholder="Name"
+                placeholder="e.g., Adult, Child, Student, Senior"
                 onChange={(e) =>
                   onTicketPropertyChange({
                     index,
@@ -76,7 +76,7 @@ function Tickets({
 
               />
               <Input
-                placeholder="Price"
+                placeholder="Ticket price in ₹"
                 onChange={(e) =>
                   onTicketPropertyChange({
                     index,
@@ -88,7 +88,7 @@ function Tickets({
                 type="number"
               />
               <Input
-                placeholder="Limit"
+                placeholder="Daily visitor limit"
                 onChange={(e) =>
                   onTicketPropertyChange({
                     index,
@@ -108,7 +108,7 @@ function Tickets({
       )}
 
       <Button className="mt-10" onClick={onAddTicketType}>
-        Add Ticket Type
+        Add Museum Ticket Type
       </Button>
 
       <div className="flex justify-center gap-5">

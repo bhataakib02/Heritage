@@ -11,8 +11,8 @@ function LocationAndDate({
   return (
     <div className="flex flex-col gap-5">
       <Input
-        placeholder="Location"
-        label="Location"
+        placeholder="Enter museum address and location"
+        label="Museum Location / Address"
         value={event?.location}
         onChange={(e) => setEvent({ ...event, location: e.target.value })}
         isRequired
@@ -21,8 +21,8 @@ function LocationAndDate({
 
       <div className="flex gap-5">
         <Input
-          placeholder="Date"
-          label="Date"
+          placeholder="Select opening date"
+          label="Opening Date"
           isRequired
           labelPlacement="outside"
           value={event?.date}
@@ -31,8 +31,8 @@ function LocationAndDate({
         />
 
         <Input
-          placeholder="Time"
-          label="Time"
+          placeholder="Select opening time"
+          label="Opening Time"
           isRequired
           labelPlacement="outside"
           value={event?.time}

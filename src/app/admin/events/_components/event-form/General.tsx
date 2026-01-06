@@ -68,21 +68,21 @@ function General({
       />
 
       <Input
-        label="Organizer"
-        placeholder="Enter organizer name"
+        label="Museum Director / Curator"
+        placeholder="Enter museum director or curator name"
         {...getCommonProps("organizer")}
       />
 
       <Textarea
-        placeholder="Enter description"
-        label="Description"
+        placeholder="Enter museum description, history, and key highlights"
+        label="Museum Description"
         {...getCommonProps("description")}
       />
 
       <div className="flex gap-5 items-end">
         <Input
-          placeholder="Enter your guests"
-          label="Guests"
+          placeholder="Enter featured exhibitions or special collections"
+          label="Featured Exhibitions"
           value={guest}
           onChange={(e) => setGuest(e.target.value)}
           labelPlacement="outside"

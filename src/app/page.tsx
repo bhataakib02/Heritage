@@ -77,8 +77,8 @@ export default function LandingPage() {
                 if (searchDate.includes('-') && searchDate.split('-')[0].length === 2) {
                     const [day, month, year] = searchDate.split('-');
                     searchDateFormatted = `${year}-${month}-${day}`;
-                }
-                
+  }
+
                 const eventDate = event.date || '';
                 dateMatch = eventDate === searchDate || eventDate === searchDateFormatted || 
                            eventDate.includes(searchDate) || searchDate.includes(eventDate);
@@ -113,7 +113,7 @@ export default function LandingPage() {
         if (typeof window !== 'undefined') {
             window.location.replace('/home');
         }
-        return (
+  return (
             <div className="min-h-screen bg-white flex items-center justify-center">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
@@ -139,7 +139,7 @@ export default function LandingPage() {
                         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold">
                             <span className="text-amber-600">HERITAGE</span>{" "}
                             <span className="text-gray-800">WORLD</span>
-                        </h1>
+                  </h1>
                     </nav>
                 </div>
             </header>
@@ -161,13 +161,13 @@ export default function LandingPage() {
                             >
                                 Sign In to Book Tickets
                             </Link>
-                            <Link
+                <Link
                                 href="/sign-up"
                                 className="px-6 py-3 bg-white text-primary border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all font-semibold"
-                            >
+                >
                                 Create Account
-                            </Link>
-                        </div>
+                </Link>
+              </div>
                     </div>
 
                     {/* Featured Museum Images - Always show 3 beautiful museum images */}
@@ -197,10 +197,10 @@ export default function LandingPage() {
                                                 (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&h=800&fit=crop&q=95';
                                             }}
                                         />
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+            </div>
+          </div>
+        ))}
+      </div>
                     </div>
 
                     {/* Search Form */}
@@ -397,8 +397,8 @@ export default function LandingPage() {
                                 >
                                     Clear Search
                                 </button>
-                            </div>
-                        )}
+        </div>
+      )}
                     </div>
                 </section>
             )}
@@ -471,6 +471,6 @@ export default function LandingPage() {
                     </div>
                 </div>
             </footer>
-        </div>
-    );
+    </div>
+  );
 }
