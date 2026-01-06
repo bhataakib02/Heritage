@@ -71,33 +71,30 @@ export default function LandingPage() {
     const searchSuggestions = events.filter((event) => {
         if (!searchName) return false;
         return event.name?.toLowerCase().includes(searchName.toLowerCase());
-    }).slice(0, 5); // Show max 5 suggestions
+    }).slice(0, 5);
 
     // Filter events based on search for display
-    const filteredEvents = events.filter((event) => {
-        const nameMatch = !searchName || event.name?.toLowerCase().includes(searchName.toLowerCase());
-        
-        // Handle date matching - convert both to same format for comparison
-        let dateMatch = true;
-        if (searchDate) {
-            // Convert searchDate to YYYY-MM-DD format if needed
-            let searchDateFormatted = searchDate;
-            if (searchDate.includes('-') && searchDate.split('-')[0].length === 2) {
-                // Format: DD-MM-YYYY -> YYYY-MM-DD
-                const [day, month, year] = searchDate.split('-');
-                searchDateFormatted = `${year}-${month}-${day}`;
+    const filteredEvents = (!searchName && !searchDate) 
+        ? events 
+        : events.filter((event) => {
+            const nameMatch = !searchName || event.name?.toLowerCase().includes(searchName.toLowerCase());
+            
+            let dateMatch = true;
+            if (searchDate) {
+                let searchDateFormatted = searchDate;
+                if (searchDate.includes('-') && searchDate.split('-')[0].length === 2) {
+                    const [day, month, year] = searchDate.split('-');
+                    searchDateFormatted = `${year}-${month}-${day}`;
+                }
+                
+                const eventDate = event.date || '';
+                dateMatch = eventDate === searchDate || eventDate === searchDateFormatted || 
+                           eventDate.includes(searchDate) || searchDate.includes(eventDate);
             }
             
-            // Compare dates (handle both formats)
-            const eventDate = event.date || '';
-            dateMatch = eventDate === searchDate || eventDate === searchDateFormatted || 
-                       eventDate.includes(searchDate) || searchDate.includes(eventDate);
-        }
-        
-        return nameMatch && dateMatch;
-    });
+            return nameMatch && dateMatch;
+        });
 
-    // Handle museum selection from dropdown
     const handleMuseumSelect = (museumName: string) => {
         setSearchName(museumName);
         setShowDropdown(false);
@@ -116,8 +113,6 @@ export default function LandingPage() {
         );
     }
 
-    // If somehow an authenticated user reaches here (shouldn't happen due to middleware),
-    // redirect immediately without showing content
     if (isSignedIn) {
         if (typeof window !== 'undefined') {
             window.location.replace('/home');
@@ -131,6 +126,9 @@ export default function LandingPage() {
             </div>
         );
     }
+
+    // Get featured museums (first 3 with images)
+    const featuredMuseums = events.filter(e => e.images && e.images.length > 0).slice(0, 3);
 
     return (
         <div className="min-h-screen bg-white">
@@ -159,20 +157,62 @@ export default function LandingPage() {
                 </div>
             </nav>
 
-            {/* Hero Section with Search */}
-            <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+            {/* Hero Section with Museum Images */}
+            <section className="relative pt-20 pb-12 md:pt-24 md:pb-16 bg-gradient-to-br from-blue-50 via-white to-purple-50">
                 <div className="container mx-auto px-6">
-                    <div className="max-w-4xl mx-auto text-center mb-12">
+                    <div className="max-w-4xl mx-auto text-center mb-8">
                         <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
                             Discover Cultural Heritage
                         </h1>
-                        <p className="text-xl text-gray-600 mb-8">
+                        <p className="text-xl text-gray-600 mb-6">
                             Book museum events, exhibitions, and cultural experiences
                         </p>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                            <Link
+                                href="/sign-in"
+                                className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all shadow-lg font-semibold"
+                            >
+                                Sign In to Book Tickets
+                            </Link>
+                            <Link
+                                href="/sign-up"
+                                className="px-6 py-3 bg-white text-primary border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all font-semibold"
+                            >
+                                Create Account
+                            </Link>
+                        </div>
                     </div>
 
-                    {/* Search Form - Booking.com Style */}
-                    <div className="max-w-5xl mx-auto">
+                    {/* Featured Museum Images */}
+                    {featuredMuseums.length > 0 && (
+                        <div className="max-w-6xl mx-auto mt-12">
+                            <div className="grid md:grid-cols-3 gap-4">
+                                {featuredMuseums.map((museum, index) => (
+                                    <div
+                                        key={museum.id || museum._id}
+                                        className="relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105"
+                                    >
+                                        <div className="aspect-video bg-gray-200 overflow-hidden">
+                                            <img
+                                                src={museum.images?.[0] || '/placeholder-image.jpg'}
+                                                alt={museum.name}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end">
+                                            <div className="p-4 text-white w-full">
+                                                <h3 className="font-bold text-lg mb-1">{museum.name}</h3>
+                                                <p className="text-sm text-white/90">{museum.location}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Search Form */}
+                    <div className="max-w-5xl mx-auto mt-8">
                         <form onSubmit={handleSearch} className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 border border-gray-200">
                             <div className="grid md:grid-cols-2 gap-4 mb-4">
                                 <div className="relative">
@@ -192,7 +232,6 @@ export default function LandingPage() {
                                             setShowDropdown(true);
                                         }}
                                         onBlur={() => {
-                                            // Delay to allow dropdown click
                                             setTimeout(() => {
                                                 setSearchFocused(false);
                                                 setShowDropdown(false);
@@ -205,11 +244,9 @@ export default function LandingPage() {
                                         placeholder="Enter museum name..."
                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                                     />
-                                    {/* Dropdown Suggestions */}
                                     {showDropdown && searchFocused && (
                                         <div className="absolute z-[100] w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-2xl max-h-60 overflow-y-auto">
                                             {searchName && searchSuggestions.length > 0 ? (
-                                                // Show filtered suggestions when typing
                                                 searchSuggestions.map((event) => (
                                                     <button
                                                         key={event.id || event._id}
@@ -223,7 +260,6 @@ export default function LandingPage() {
                                                     </button>
                                                 ))
                                             ) : !searchName && events.length > 0 ? (
-                                                // Show all museums when no search text
                                                 events.slice(0, 10).map((event) => (
                                                     <button
                                                         key={event.id || event._id}
@@ -309,21 +345,63 @@ export default function LandingPage() {
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
                             <p className="text-gray-600">Loading museums...</p>
                         </div>
-                    ) : filteredEvents.length === 0 ? (
+                    ) : events.length === 0 ? (
                         <div className="text-center py-12">
                             <p className="text-gray-600 text-lg mb-4">
-                                {searchName || searchDate 
-                                    ? "No museums found matching your search." 
-                                    : "No museums available at the moment."}
+                                No museums available at the moment.
                             </p>
-                            {!searchName && !searchDate && (
-                                <Link
-                                    href="/sign-up"
-                                    className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all font-semibold inline-block"
-                                >
-                                    Sign Up to Add Museums
-                                </Link>
-                            )}
+                            <Link
+                                href="/sign-up"
+                                className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all font-semibold inline-block"
+                            >
+                                Sign Up to Add Museums
+                            </Link>
+                        </div>
+                    ) : filteredEvents.length === 0 && (searchName || searchDate) ? (
+                        <div className="text-center py-12">
+                            <p className="text-gray-600 text-lg mb-4">
+                                No museums found matching your search. Showing all museums instead.
+                            </p>
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mt-8">
+                                {events.slice(0, 6).map((event) => (
+                                    <div
+                                        key={event.id || event._id}
+                                        className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all border border-gray-100 overflow-hidden"
+                                    >
+                                        <div className="h-48 bg-gray-200 overflow-hidden">
+                                            <img
+                                                src={event.images?.[0] || '/placeholder-image.jpg'}
+                                                alt={event.name}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <div className="p-6">
+                                            <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">
+                                                {event.name}
+                                            </h3>
+                                            <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                                                {event.description}
+                                            </p>
+                                            <div className="space-y-2 mb-4 text-sm text-gray-600">
+                                                <div className="flex items-center gap-2">
+                                                    <i className="ri-map-pin-line text-primary"></i>
+                                                    <span>{event.location}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <i className="ri-calendar-line text-primary"></i>
+                                                    <span>{event.date} at {event.time}</span>
+                                                </div>
+                                            </div>
+                                            <Link
+                                                href={`/book-event/${event.id || event._id}`}
+                                                className="block w-full text-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all font-semibold"
+                                            >
+                                                Book Tickets
+                                            </Link>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     ) : (
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
@@ -360,7 +438,7 @@ export default function LandingPage() {
                                             href={`/book-event/${event.id || event._id}`}
                                             className="block w-full text-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all font-semibold"
                                         >
-                                            View Details
+                                            Book Tickets
                                         </Link>
                                     </div>
                                 </div>
@@ -433,16 +511,16 @@ export default function LandingPage() {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link
-                            href="/sign-up"
+                            href="/sign-in"
                             className="px-8 py-4 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl font-semibold text-lg"
                         >
-                            Create Free Account
+                            Sign In to Book Tickets
                         </Link>
                         <Link
-                            href="/sign-in"
+                            href="/sign-up"
                             className="px-8 py-4 bg-white text-primary border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all font-semibold text-lg"
                         >
-                            Sign In
+                            Create Free Account
                         </Link>
                     </div>
                 </div>
