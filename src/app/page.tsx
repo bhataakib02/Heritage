@@ -4,6 +4,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
+import axios from "axios";
+
+interface Event {
+    id?: string;
+    _id?: string;
+    name: string;
+    description: string;
+    location: string;
+    date: string;
+    time: string;
+    images?: string[];
+}
 
 export default function LandingPage() {
     const { isSignedIn, isLoaded } = useUser();
@@ -11,6 +23,28 @@ export default function LandingPage() {
     const [scrolled, setScrolled] = useState(false);
     const [searchName, setSearchName] = useState("");
     const [searchDate, setSearchDate] = useState("");
+    const [events, setEvents] = useState<Event[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [searchFocused, setSearchFocused] = useState(false);
+
+    // Fetch events from database
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                const response = await axios.get('/api/events/public');
+                if (response.data.success) {
+                    setEvents(response.data.events || []);
+                }
+            } catch (error) {
+                console.error("Error fetching events:", error);
+                setEvents([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchEvents();
+    }, []);
 
     // Handle scroll for sticky navbar
     useEffect(() => {
@@ -23,10 +57,29 @@ export default function LandingPage() {
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        const params = new URLSearchParams();
-        if (searchName) params.set('name', searchName);
-        if (searchDate) params.set('date', searchDate);
-        router.push(`/home?${params.toString()}`);
+        // Filter events locally
+        setLoading(true);
+        setTimeout(() => setLoading(false), 100);
+    };
+
+    // Filter events for dropdown suggestions
+    const searchSuggestions = events.filter((event) => {
+        if (!searchName) return false;
+        return event.name?.toLowerCase().includes(searchName.toLowerCase());
+    }).slice(0, 5); // Show max 5 suggestions
+
+    // Filter events based on search for display
+    const filteredEvents = events.filter((event) => {
+        const nameMatch = !searchName || event.name?.toLowerCase().includes(searchName.toLowerCase());
+        const dateMatch = !searchDate || event.date === searchDate;
+        return nameMatch && dateMatch;
+    });
+
+    // Handle museum selection from dropdown
+    const handleMuseumSelect = (museumName: string) => {
+        setSearchName(museumName);
+        setShowDropdown(false);
+        setSearchFocused(false);
     };
 
     // Wait for Clerk to load
@@ -161,8 +214,86 @@ export default function LandingPage() {
                 </div>
             </section>
 
-            {/* Features Section */}
+            {/* Museums Section */}
             <section className="py-16 md:py-24 bg-white">
+                <div className="container mx-auto px-6">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                            Explore Our Museums
+                        </h2>
+                        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                            Discover amazing cultural heritage experiences
+                        </p>
+                    </div>
+
+                    {loading ? (
+                        <div className="text-center py-12">
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                            <p className="text-gray-600">Loading museums...</p>
+                        </div>
+                    ) : filteredEvents.length === 0 ? (
+                        <div className="text-center py-12">
+                            <p className="text-gray-600 text-lg mb-4">
+                                {searchName || searchDate 
+                                    ? "No museums found matching your search." 
+                                    : "No museums available at the moment."}
+                            </p>
+                            {!searchName && !searchDate && (
+                                <Link
+                                    href="/sign-up"
+                                    className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all font-semibold inline-block"
+                                >
+                                    Sign Up to Add Museums
+                                </Link>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                            {filteredEvents.map((event) => (
+                                <div
+                                    key={event.id || event._id}
+                                    className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all border border-gray-100 overflow-hidden"
+                                >
+                                    <div className="h-48 bg-gray-200 overflow-hidden">
+                                        <img
+                                            src={event.images?.[0] || '/placeholder-image.jpg'}
+                                            alt={event.name}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                    <div className="p-6">
+                                        <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">
+                                            {event.name}
+                                        </h3>
+                                        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                                            {event.description}
+                                        </p>
+                                        <div className="space-y-2 mb-4 text-sm text-gray-600">
+                                            <div className="flex items-center gap-2">
+                                                <i className="ri-map-pin-line text-primary"></i>
+                                                <span>{event.location}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <i className="ri-calendar-line text-primary"></i>
+                                                <span>{event.date} at {event.time}</span>
+                                            </div>
+                                        </div>
+                                        <Link
+                                            href={`/book-event/${event.id || event._id}`}
+                                            className="block w-full text-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all font-semibold"
+                                        >
+                                            View Details
+                                        </Link>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </section>
+
+            {/* Features Section */}
+            <section className="py-16 md:py-24 bg-gray-50">
                 <div className="container mx-auto px-6">
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
