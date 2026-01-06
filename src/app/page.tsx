@@ -47,7 +47,7 @@ export default function LandingPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+        <div className="min-h-screen">
             {/* Sticky Navigation */}
             <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
                 scrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
@@ -74,7 +74,9 @@ export default function LandingPage() {
             </nav>
 
             {/* Hero Section */}
-            <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
+            <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden bg-cover bg-center bg-fixed" style={{
+                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')`
+            }}>
                 {/* Background decoration */}
                 <div className="absolute inset-0 overflow-hidden">
                     <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
@@ -89,12 +91,12 @@ export default function LandingPage() {
                             <span>Trusted by 10,000+ Cultural Enthusiasts</span>
                         </div>
                         
-                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-gray-900 mb-6 leading-tight animate-fade-in-up">
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight animate-fade-in-up drop-shadow-lg">
                             Explore Cultural
                             <span className="text-primary block mt-2">Heritage</span>
                         </h1>
                         
-                        <p className="text-xl md:text-2xl text-gray-600 mb-10 leading-relaxed max-w-3xl mx-auto animate-fade-in-up delay-100">
+                        <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed max-w-3xl mx-auto animate-fade-in-up delay-100 drop-shadow-md">
                             Discover and book museum events, exhibitions, and cultural heritage experiences.
                             Connect with history, art, and culture in one place.
                         </p>
