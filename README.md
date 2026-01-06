@@ -152,11 +152,8 @@ Heritage-app-main/
 
 - `README.md` - This file
 - `SUPABASE_SETUP.md` - Supabase setup instructions
-- `MIGRATION_GUIDE.md` - Database migration guide
 - `ADMIN_FEATURES.md` - Admin features documentation
 - `OPTIMIZATIONS_IMPLEMENTED.md` - Performance optimizations
-- `ADD_BOOKINGS_GUIDE.md` - Guide for adding bookings
-- `MAKE_ADMIN_GUIDE.md` - Guide for making users admin
 
 ## Security Notes
 
