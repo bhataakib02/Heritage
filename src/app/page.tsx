@@ -32,7 +32,14 @@ export default function LandingPage() {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await axios.get('/api/events/public');
+                // Add cache-busting timestamp to ensure fresh data
+                const timestamp = new Date().getTime();
+                const response = await axios.get(`/api/events/public?t=${timestamp}`, {
+                    headers: {
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache'
+                    }
+                });
                 if (response.data.success) {
                     const fetchedEvents = response.data.events || [];
                     setEvents(fetchedEvents);
