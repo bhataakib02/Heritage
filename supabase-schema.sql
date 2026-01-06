@@ -14,19 +14,21 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create events table
+-- Create events table (Museums)
+-- Note: date and time have defaults for museums that are always open
 CREATE TABLE IF NOT EXISTS events (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     name TEXT NOT NULL,
     description TEXT NOT NULL,
-    organizer TEXT NOT NULL,
-    guests JSONB NOT NULL,
-    location TEXT NOT NULL,
-    date TEXT NOT NULL,
-    time TEXT NOT NULL,
-    images JSONB NOT NULL,
-    "ticketTypes" JSONB NOT NULL,
+    organizer TEXT NOT NULL, -- Museum Director/Curator
+    guests JSONB DEFAULT '[]'::jsonb, -- Featured Exhibitions
+    location TEXT NOT NULL, -- Full museum address
+    date TEXT DEFAULT 'Open Daily', -- Established date or status (optional)
+    time TEXT DEFAULT '9:00 AM - 6:00 PM', -- Opening hours (optional)
+    images JSONB DEFAULT '[]'::jsonb, -- Museum images array
+    "ticketTypes" JSONB DEFAULT '[]'::jsonb, -- Ticket types with pricing
     "user" UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    "additionalInfo" TEXT, -- Additional location info (parking, transport, etc.)
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -47,10 +49,17 @@ CREATE TABLE IF NOT EXISTS bookings (
 
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_users_clerk_user_id ON users("clerkUserId");
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_users_user_name ON users("userName");
+
 CREATE INDEX IF NOT EXISTS idx_events_user ON events("user");
+CREATE INDEX IF NOT EXISTS idx_events_name ON events(name);
+CREATE INDEX IF NOT EXISTS idx_events_location ON events(location);
+
 CREATE INDEX IF NOT EXISTS idx_bookings_event ON bookings(event);
 CREATE INDEX IF NOT EXISTS idx_bookings_user ON bookings("user");
 CREATE INDEX IF NOT EXISTS idx_bookings_status ON bookings(status);
+CREATE INDEX IF NOT EXISTS idx_bookings_created_at ON bookings(created_at);
 
 -- Create function to update updated_at timestamp
 CREATE OR REPLACE FUNCTION update_updated_at_column()

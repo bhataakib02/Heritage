@@ -138,9 +138,9 @@ function LayoutProviders({ children }: { children: React.ReactNode }) {
 
                         {/* User Profile Button */}
                         <div className="flex items-center">
-                            <UserButton
-                                afterSignOutUrl="/"
-                            />
+                        <UserButton
+                            afterSignOutUrl="/"
+                        />
                         </div>
                     </div>
                 </div>

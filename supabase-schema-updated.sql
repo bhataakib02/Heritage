@@ -10,6 +10,8 @@
 -- =====================================================
 -- 1. USERS TABLE
 -- =====================================================
+-- NOTE: Keep this table structure as it exists in your database
+-- Only create if it doesn't exist to avoid conflicts
 CREATE TABLE IF NOT EXISTS users (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     "userName" TEXT NOT NULL UNIQUE,

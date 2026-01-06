@@ -84,23 +84,23 @@ function Media({
             Uploaded Images ({alreadyUploadedImages?.length || 0 + newlySelectedImages?.length || 0})
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {alreadyUploadedImages?.map((image: any, index: number) => (
+        {alreadyUploadedImages?.map((image: any, index: number) => (
               <div key={`existing-${index}`} className="relative group border-2 border-gray-200 rounded-lg overflow-hidden hover:border-primary transition-colors">
-                <img
-                  src={image}
+            <img
+              src={image}
                   alt={`Museum image ${index + 1}`}
                   className="w-full h-48 object-cover"
-                />
+            />
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity flex items-center justify-center">
                   <Button
                     size="sm"
                     color="danger"
                     variant="flat"
-                    onClick={() => onAlreadyUploadedRemove(index)}
+              onClick={() => onAlreadyUploadedRemove(index)}
                     className="opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
+            >
                     <i className="ri-delete-bin-line mr-1"></i>
-                    Remove
+              Remove
                   </Button>
                 </div>
                 {index === 0 && (
@@ -108,30 +108,30 @@ function Media({
                     Main Image
                   </div>
                 )}
-              </div>
-            ))}
-            {newlySelectedImages?.map((image: any, index: number) => (
+          </div>
+        ))}
+        {newlySelectedImages?.map((image: any, index: number) => (
               <div key={`new-${index}`} className="relative group border-2 border-gray-200 rounded-lg overflow-hidden hover:border-primary transition-colors">
-                <img
-                  src={image.url}
+            <img
+              src={image.url}
                   alt={`New museum image ${index + 1}`}
                   className="w-full h-48 object-cover"
-                />
+            />
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity flex items-center justify-center">
                   <Button
                     size="sm"
                     color="danger"
                     variant="flat"
-                    onClick={() => onNewUploadedRemove(index)}
+              onClick={() => onNewUploadedRemove(index)}
                     className="opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
+            >
                     <i className="ri-delete-bin-line mr-1"></i>
-                    Remove
+              Remove
                   </Button>
                 </div>
-              </div>
-            ))}
           </div>
+        ))}
+      </div>
         </div>
       )}
 
