@@ -5,10 +5,17 @@ import BookingModel from "@/models/booking-model";
 import React from "react";
 import UsersTableWithFeatures from "./_components/users-table-with-features";
 
-connectDB();
+// Disable caching to ensure fresh data on Vercel
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 async function UsersPage() {
     try {
+        // Connect to database (non-blocking)
+        await connectDB().catch(error => {
+            console.error("Database connection error:", error);
+        });
+
         // Fetch all users
         const users = await UserModel.find({}, {
             sort: { created_at: -1 }

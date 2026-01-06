@@ -3,7 +3,9 @@ import UserModel from "@/models/user-model";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 
-connectDB();
+// Disable caching for API routes
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 export async function PUT(
     request: NextRequest,
@@ -13,6 +15,11 @@ export async function PUT(
         const { userId } = auth();
         if (!userId)
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+
+        // Connect to database
+        await connectDB().catch(error => {
+            console.error("Database connection error:", error);
+        });
 
         const reqBody = await request.json();
         
@@ -24,12 +31,29 @@ export async function PUT(
         // Ensure updated_at is set automatically
         reqBody.updated_at = new Date().toISOString();
         
-        await UserModel.findByIdAndUpdate(params.userid, reqBody);
+        const updatedUser = await UserModel.findByIdAndUpdate(params.userid, reqBody);
+        
+        if (!updatedUser) {
+            return NextResponse.json(
+                { message: "User not found" },
+                { status: 404 }
+            );
+        }
+
+        // Return response with no-cache headers
         return NextResponse.json(
-            { message: "User updated successfully" },
-            { status: 200 }
+            { message: "User updated successfully", user: updatedUser },
+            { 
+                status: 200,
+                headers: {
+                    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0',
+                }
+            }
         );
     } catch (error: any) {
+        console.error("Error updating user:", error);
         return NextResponse.json({ message: error.message }, { status: 500 });
     }
 }
@@ -42,6 +66,11 @@ export async function DELETE(
         const { userId } = auth();
         if (!userId)
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+
+        // Connect to database
+        await connectDB().catch(error => {
+            console.error("Database connection error:", error);
+        });
 
         // Check if user exists
         const user = await UserModel.findById(params.userid);
@@ -59,11 +88,21 @@ export async function DELETE(
         }
 
         await UserModel.findByIdAndDelete(params.userid);
+        
+        // Return response with no-cache headers
         return NextResponse.json(
             { message: "User deleted successfully" },
-            { status: 200 }
+            { 
+                status: 200,
+                headers: {
+                    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0',
+                }
+            }
         );
     } catch (error: any) {
+        console.error("Error deleting user:", error);
         return NextResponse.json({ message: error.message }, { status: 500 });
     }
 }
