@@ -19,5 +19,5 @@ export interface IModel<T = any> {
     save?(instance: any): Promise<T>;
 }
 
-export type DatabaseType = 'mongodb' | 'supabase' | 'postgresql' | 'mysql' | 'sqlite' | 'firestore';
+export type DatabaseType = 'supabase' | 'postgresql' | 'mysql' | 'sqlite' | 'firestore';
 

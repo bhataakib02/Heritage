@@ -2,7 +2,7 @@ import { connectDB } from "@/config/dbConfig";
 import EventModel from "@/models/event-model";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
-import { getMongoDBUserIDOfLoggedInUser } from "@/actions/users";
+import { getUserIdOfLoggedInUser } from "@/actions/users";
 
 connectDB();
 
@@ -20,13 +20,13 @@ export async function POST(
             return NextResponse.json({ message: "Event not found" }, { status: 404 });
         }
 
-        const mongoUserId = await getMongoDBUserIDOfLoggedInUser();
+        const userId = await getUserIdOfLoggedInUser();
         
         // Create duplicate without id and timestamps
         const eventData: any = {
             ...originalEvent,
             name: `${(originalEvent as any).name} (Copy)`,
-            user: mongoUserId,
+            user: userId,
         };
         
         // Remove id and timestamps so new ones are generated

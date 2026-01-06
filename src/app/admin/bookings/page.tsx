@@ -1,4 +1,4 @@
-import { getMongoDBUserIDOfLoggedInUser } from "@/actions/users";
+import { getUserIdOfLoggedInUser } from "@/actions/users";
 import PageTitle from "@/components/PageTitle";
 import { connectDB } from "@/config/dbConfig";
 import { BookingType, EventType } from "@/interfaces/events";

@@ -1,5 +1,5 @@
 import {
-  getMongoDBUserIDOfLoggedInUser,
+  getUserIdOfLoggedInUser,
   handleNewUserRegistration,
 } from "@/actions/users";
 import Filters from "@/components/Filters";
@@ -20,7 +20,7 @@ interface Props {
 export default async function Home({ searchParams }: Props) {
   await handleNewUserRegistration();
 
-  await getMongoDBUserIDOfLoggedInUser();
+  await getUserIdOfLoggedInUser();
 
   let filters = {};
   if (searchParams.name) {

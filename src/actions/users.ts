@@ -263,7 +263,7 @@ export const handleNewUserRegistration = async () => {
     }
 };
 
-export const getMongoDBUserIDOfLoggedInUser = async () => {
+export const getUserIdOfLoggedInUser = async () => {
     try {
         const loggedInUser = await currentUser();
         const userInDb = await UserModel.findOne({
@@ -278,5 +278,5 @@ export const getMongoDBUserIDOfLoggedInUser = async () => {
     }
 };
 
-// Alias for better naming (keeping old name for backward compatibility)
-export const getUserIdOfLoggedInUser = getMongoDBUserIDOfLoggedInUser;
+// Backward compatibility alias (deprecated - use getUserIdOfLoggedInUser instead)
+export const getMongoDBUserIDOfLoggedInUser = getUserIdOfLoggedInUser;

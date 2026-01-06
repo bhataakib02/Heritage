@@ -1,5 +1,5 @@
 /**
- * Normalize data between MongoDB and Supabase formats
+ * Normalize data for Supabase format
  */
 
 export function normalizeEvent(event: any): any {

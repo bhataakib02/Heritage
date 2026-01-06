@@ -6,7 +6,7 @@
 import { DatabaseFactory } from "./factory";
 
 /**
- * Normalizes ID field - converts _id (MongoDB) to id (Supabase) or vice versa
+ * Normalizes ID field - handles both id and _id fields for Supabase compatibility
  */
 export function normalizeId(record: any): any {
     if (!record) return record;
@@ -20,7 +20,7 @@ export function normalizeId(record: any): any {
             delete record._id;
         }
     } else {
-        // MongoDB uses '_id', ensure it exists
+        // Some legacy data might use '_id', ensure it exists
         if (record.id && !record._id) {
             record._id = record.id;
             delete record.id;

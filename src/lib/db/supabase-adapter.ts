@@ -58,7 +58,7 @@ export class SupabaseModelAdapter<T = any> implements IModel<T> {
     async find(filter: any = {}, options?: { sort?: any; limit?: number }): Promise<T[]> {
         let query = this.supabase.from(this.tableName).select('*');
         
-        // Apply filters - handle MongoDB-style queries
+        // Apply filters - handle query operators
         if (filter && Object.keys(filter).length > 0) {
             // Handle $or queries
             if (filter.$or && Array.isArray(filter.$or)) {
@@ -87,7 +87,7 @@ export class SupabaseModelAdapter<T = any> implements IModel<T> {
                         if (Array.isArray(filter[key])) {
                             query = query.in(key, filter[key]);
                         } else if (typeof filter[key] === 'object') {
-                            // Handle MongoDB query operators
+                            // Handle query operators
                             if (filter[key].$regex) {
                                 // Convert regex to ilike (case-insensitive search)
                                 const pattern = filter[key].$regex.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

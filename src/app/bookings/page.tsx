@@ -1,4 +1,4 @@
-import { getMongoDBUserIDOfLoggedInUser } from "@/actions/users";
+import { getUserIdOfLoggedInUser } from "@/actions/users";
 import PageTitle from "@/components/PageTitle";
 import { connectDB } from "@/config/dbConfig";
 import { BookingType, EventType } from "@/interfaces/events";
@@ -9,9 +9,9 @@ import dayjs from "dayjs";
 import React from "react";
 connectDB();
 async function BookingsPage() {
-  const mongoUserId = await getMongoDBUserIDOfLoggedInUser();
+  const userId = await getUserIdOfLoggedInUser();
   const bookings = await BookingModel.find({
-    user: mongoUserId,
+    user: userId,
   });
   
   // Populate events manually (Supabase doesn't have .populate())

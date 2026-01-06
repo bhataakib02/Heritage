@@ -1,7 +1,7 @@
 import { connectDB } from "@/config/dbConfig";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
-import { getMongoDBUserIDOfLoggedInUser } from "@/actions/users";
+import { getUserIdOfLoggedInUser } from "@/actions/users";
 import BookingModel from "@/models/booking-model";
 
 connectDB();
@@ -12,9 +12,9 @@ export async function POST(request: NextRequest) {
         if (!userId)
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-        const mongoUserId = await getMongoDBUserIDOfLoggedInUser();
+        const userId = await getUserIdOfLoggedInUser();
         const reqBody = await request.json();
-        reqBody.user = mongoUserId;
+        reqBody.user = userId;
         await BookingModel.create(reqBody);
         return NextResponse.json(
             { message: "Visiting Slot booked successfully" },

@@ -47,7 +47,6 @@ export function createSupabaseModelAdapter<T = any>(
 export class ModelFactory {
     static createModel<T = any>(
         modelName: string,
-        mongooseModel?: any,
         idField: string = 'id'
     ): IModel<T> {
         // Only Supabase is supported now
