@@ -191,6 +191,10 @@ export default function LandingPage() {
                                             alt={`Museum ${index + 1}`}
                                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                                             loading="lazy"
+                                            onError={(e) => {
+                                                // Fallback to placeholder if image not found
+                                                (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&h=600&fit=crop';
+                                            }}
                                         />
                                     </div>
                                 </div>
