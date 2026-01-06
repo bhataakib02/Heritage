@@ -60,50 +60,95 @@ function General({
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-6">
+      <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+        <p className="text-sm text-blue-700">
+          <strong>Professional Tip:</strong> Provide comprehensive information to help visitors understand your museum's unique value and offerings.
+        </p>
+      </div>
+
       <Input
         label="Museum Name"
-        placeholder="Enter museum name"
+        placeholder="e.g., National Museum of Cultural Heritage"
+        description="Official name of the museum"
         {...getCommonProps("name")}
+        classNames={{
+          input: "text-base",
+        }}
       />
 
       <Input
-        label="Museum Director / Curator"
-        placeholder="Enter museum director or curator name"
+        label="Director / Curator"
+        placeholder="e.g., Dr. John Smith, Chief Curator"
+        description="Name and title of museum director or chief curator"
         {...getCommonProps("organizer")}
+        classNames={{
+          input: "text-base",
+        }}
       />
 
       <Textarea
-        placeholder="Enter museum description, history, and key highlights"
+        placeholder="Describe the museum's history, mission, collections, and key highlights. Include information about permanent and temporary exhibitions, special programs, and what makes this museum unique."
         label="Museum Description"
+        description="Comprehensive description of the museum (minimum 100 characters recommended)"
         {...getCommonProps("description")}
+        minRows={5}
+        classNames={{
+          input: "text-base",
+        }}
       />
 
-      <div className="flex gap-5 items-end">
-        <Input
-          placeholder="Enter featured exhibitions or special collections"
-          label="Featured Exhibitions"
-          value={guest}
-          onChange={(e) => setGuest(e.target.value)}
-          labelPlacement="outside"
-        />
-        <Button onClick={onGuestAdd} color="primary">Add</Button>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Featured Exhibitions & Collections
+          <span className="text-gray-400 font-normal ml-2">(Optional)</span>
+        </label>
+        <div className="flex gap-3 items-end">
+          <Input
+            placeholder="e.g., Ancient Artifacts Collection, Modern Art Gallery, Interactive Science Exhibits"
+            value={guest}
+            onChange={(e) => setGuest(e.target.value)}
+            labelPlacement="outside"
+            classNames={{
+              input: "text-base",
+            }}
+          />
+          <Button 
+            onClick={onGuestAdd} 
+            color="primary"
+            isDisabled={!guest.trim()}
+            className="font-medium"
+          >
+            Add
+          </Button>
+        </div>
+        {event?.guests && event.guests.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-3">
+            {event.guests.map((guest: string, index: number) => (
+              <Chip 
+                key={index}
+                onClose={() => onGuestRemove(index)}
+                variant="flat"
+                color="primary"
+                className="text-sm"
+              >
+                {guest}
+              </Chip>
+            ))}
+          </div>
+        )}
       </div>
 
-      <div className="flex flex-wrap gap-5">
-        {event?.guests?.map((guest: string, index: number) => (
-          <Chip onClose={() => onGuestRemove(index)}>{guest}</Chip>
-        ))}
-      </div>
-
-      <div className="flex justify-center gap-5">
-        <Button onClick={() => { }}>cancel</Button>
+      <div className="flex justify-between items-center pt-4 border-t">
+        <div></div>
         <Button
           onClick={() => setActiveStep(activeStep + 1)}
           color="primary"
-          isDisabled={!event?.name || !event?.organizer || !event?.description}
+          size="lg"
+          isDisabled={!event?.name || !event?.organizer || !event?.description || (event?.description?.length < 50)}
+          className="font-semibold px-8"
         >
-          Next
+          Continue to Location →
         </Button>
       </div>
     </div>

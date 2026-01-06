@@ -44,9 +44,25 @@ function Media({
   };
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="w-max">
-        <Button onClick={() => uploadFilesRef.current?.click()}>
+    <div className="flex flex-col gap-6">
+      <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+        <p className="text-sm text-blue-700">
+          <strong>Professional Tip:</strong> Upload high-quality images showcasing your museum's architecture, exhibitions, and key attractions. First image will be used as the main display image.
+        </p>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-3">
+          Museum Images
+          <span className="text-gray-400 font-normal ml-2">(Recommended: 3-10 images)</span>
+        </label>
+        <Button 
+          onClick={() => uploadFilesRef.current?.click()}
+          color="primary"
+          variant="bordered"
+          className="font-medium"
+          startContent={<i className="ri-upload-cloud-line"></i>}
+        >
           <input
             type="file"
             ref={uploadFilesRef}
@@ -55,50 +71,93 @@ function Media({
             accept="image/*"
             multiple
           />
-          Upload Museum Images
+          Upload Images
         </Button>
-      </div>
-      {/* // show the newly selected images */}
-
-      <div className="flex gap-5">
-        {alreadyUploadedImages?.map((image: any, index: number) => (
-          <div className="border flex flex-col gap-5 rounded pb-5">
-            <img
-              key={index}
-              src={image}
-              alt="newly selected"
-              className="w-40 h-40 object-cover"
-            />
-            <h1
-              className="text-center cursor-pointer text-sm underline"
-              onClick={() => onAlreadyUploadedRemove(index)}
-            >
-              Remove
-            </h1>
-          </div>
-        ))}
-        {newlySelectedImages?.map((image: any, index: number) => (
-          <div className="border flex flex-col gap-5 rounded pb-5">
-            <img
-              key={index}
-              src={image.url}
-              alt="newly selected"
-              className="w-40 h-40 object-cover"
-            />
-            <h1
-              className="text-center cursor-pointer text-sm underline"
-              onClick={() => onNewUploadedRemove(index)}
-            >
-              Remove
-            </h1>
-          </div>
-        ))}
+        <p className="text-xs text-gray-500 mt-2">
+          Supported formats: JPG, PNG, WebP. Maximum file size: 10MB per image.
+        </p>
       </div>
 
-      <div className="flex justify-center gap-5">
-        <Button onClick={() => setActiveStep(activeStep - 1)}>Back</Button>
-        <Button onClick={() => setActiveStep(activeStep + 1)} color="primary">
-          Next
+      {(alreadyUploadedImages?.length > 0 || newlySelectedImages?.length > 0) && (
+        <div>
+          <h3 className="text-sm font-semibold text-gray-700 mb-3">
+            Uploaded Images ({alreadyUploadedImages?.length || 0 + newlySelectedImages?.length || 0})
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {alreadyUploadedImages?.map((image: any, index: number) => (
+              <div key={`existing-${index}`} className="relative group border-2 border-gray-200 rounded-lg overflow-hidden hover:border-primary transition-colors">
+                <img
+                  src={image}
+                  alt={`Museum image ${index + 1}`}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity flex items-center justify-center">
+                  <Button
+                    size="sm"
+                    color="danger"
+                    variant="flat"
+                    onClick={() => onAlreadyUploadedRemove(index)}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <i className="ri-delete-bin-line mr-1"></i>
+                    Remove
+                  </Button>
+                </div>
+                {index === 0 && (
+                  <div className="absolute top-2 left-2 bg-primary text-white text-xs px-2 py-1 rounded">
+                    Main Image
+                  </div>
+                )}
+              </div>
+            ))}
+            {newlySelectedImages?.map((image: any, index: number) => (
+              <div key={`new-${index}`} className="relative group border-2 border-gray-200 rounded-lg overflow-hidden hover:border-primary transition-colors">
+                <img
+                  src={image.url}
+                  alt={`New museum image ${index + 1}`}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity flex items-center justify-center">
+                  <Button
+                    size="sm"
+                    color="danger"
+                    variant="flat"
+                    onClick={() => onNewUploadedRemove(index)}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <i className="ri-delete-bin-line mr-1"></i>
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {(!alreadyUploadedImages || alreadyUploadedImages.length === 0) && (!newlySelectedImages || newlySelectedImages.length === 0) && (
+        <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
+          <i className="ri-image-line text-4xl text-gray-400 mb-3"></i>
+          <p className="text-gray-500 text-sm">No images uploaded yet</p>
+          <p className="text-gray-400 text-xs mt-1">Click "Upload Images" to add museum photos</p>
+        </div>
+      )}
+
+      <div className="flex justify-between items-center pt-4 border-t">
+        <Button 
+          variant="light" 
+          onClick={() => setActiveStep(activeStep - 1)}
+          className="font-medium"
+        >
+          ← Back
+        </Button>
+        <Button 
+          onClick={() => setActiveStep(activeStep + 1)} 
+          color="primary"
+          size="lg"
+          className="font-semibold px-8"
+        >
+          Continue to Tickets →
         </Button>
       </div>
     </div>
