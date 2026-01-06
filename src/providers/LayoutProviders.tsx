@@ -52,7 +52,8 @@ function LayoutProviders({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const router = useRouter();
     const [menusToShow, setMenusToShow] = React.useState<any[]>([]);
-    const isPrivateRoute = !["/sign-in", "/sign-up"].includes(pathname);
+    // Hide navigation on landing page, sign-in, and sign-up pages
+    const isPrivateRoute = !["/", "/landing", "/sign-in", "/sign-up"].includes(pathname);
     const getUserData = async () => {
         try {
             const response = await axios.get('/api/current-user');
