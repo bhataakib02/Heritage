@@ -27,35 +27,77 @@ export default function LandingPage() {
     const [loading, setLoading] = useState(true);
     const [showDropdown, setShowDropdown] = useState(false);
     const [searchFocused, setSearchFocused] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
 
-    // Fetch events from database
-    useEffect(() => {
-        const fetchEvents = async () => {
-            try {
-                // Add cache-busting timestamp to ensure fresh data
-                const timestamp = new Date().getTime();
-                const response = await axios.get(`/api/events/public?t=${timestamp}`, {
-                    headers: {
-                        'Cache-Control': 'no-cache',
-                        'Pragma': 'no-cache'
-                    }
-                });
-                if (response.data.success) {
-                    const fetchedEvents = response.data.events || [];
-                    setEvents(fetchedEvents);
-                    console.log("Fetched events:", fetchedEvents.length);
-                } else {
-                    console.error("API returned success: false");
-                    setEvents([]);
+    // Fetch events from database - with aggressive cache busting
+    const fetchEvents = async (forceRefresh = false) => {
+        try {
+            setLoading(true);
+            // Multiple cache-busting parameters to ensure fresh data
+            const timestamp = Date.now();
+            const random = Math.random().toString(36).substring(7);
+            const refresh = forceRefresh ? refreshKey + 1 : refreshKey;
+            
+            const response = await axios.get(`/api/events/public?t=${timestamp}&r=${random}&_=${Date.now()}&refresh=${refresh}`, {
+                headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0',
+                },
+                // Disable axios cache
+                params: {
+                    t: timestamp,
+                    r: random,
+                    _: Date.now(),
+                    refresh: refresh
                 }
-            } catch (error) {
-                console.error("Error fetching events:", error);
+            });
+            if (response.data.success) {
+                const fetchedEvents = response.data.events || [];
+                setEvents(fetchedEvents);
+                console.log("Fetched events:", fetchedEvents.length, "at", new Date().toISOString());
+            } else {
+                console.error("API returned success: false");
                 setEvents([]);
-            } finally {
-                setLoading(false);
             }
+        } catch (error) {
+            console.error("Error fetching events:", error);
+            setEvents([]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Manual refresh function
+    const handleRefresh = () => {
+        setRefreshKey(prev => prev + 1);
+        fetchEvents(true);
+    };
+
+    useEffect(() => {
+        // Fetch immediately on mount
+        fetchEvents(false);
+    }, []);
+
+    useEffect(() => {
+        // Refetch when refreshKey changes
+        if (refreshKey > 0) {
+            fetchEvents(true);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [refreshKey]);
+
+    useEffect(() => {
+        // Also fetch on window focus (when user returns to tab)
+        const handleFocus = () => {
+            setRefreshKey(prev => prev + 1);
         };
-        fetchEvents();
+        window.addEventListener('focus', handleFocus);
+        
+        // Cleanup
+        return () => {
+            window.removeEventListener('focus', handleFocus);
+        };
     }, []);
 
 
@@ -142,11 +184,20 @@ export default function LandingPage() {
             {/* Top Navigation Header - Museum Style */}
             <header className="w-full bg-white border-b-2 border-gray-200 shadow-sm py-4 md:py-5">
                 <div className="container mx-auto px-6">
-                    <nav className="flex items-center justify-center">
+                    <nav className="flex items-center justify-center relative">
                         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold">
                             <span className="text-amber-600">HERITAGE</span>{" "}
                             <span className="text-gray-800">WORLD</span>
-                  </h1>
+                        </h1>
+                        <button
+                            onClick={handleRefresh}
+                            disabled={loading}
+                            className="absolute right-0 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                            title="Refresh museums list"
+                        >
+                            <i className={`ri-refresh-line ${loading ? 'animate-spin' : ''}`}></i>
+                            {loading ? 'Loading...' : 'Refresh'}
+                        </button>
                     </nav>
                 </div>
             </header>
