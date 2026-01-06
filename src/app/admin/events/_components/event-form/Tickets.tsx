@@ -40,6 +40,15 @@ function Tickets({
   }) => {
     const tempEvent = { ...event };
     tempEvent.ticketTypes[index][property] = value;
+    
+    // If name is Custom, use customName as the display name
+    if (property === "name" && value === "Custom") {
+      // Keep customName if it exists
+    } else if (property === "name" && value !== "Custom") {
+      // Clear customName when switching away from Custom
+      tempEvent.ticketTypes[index].customName = "";
+    }
+    
     setEvent(tempEvent);
   };
 

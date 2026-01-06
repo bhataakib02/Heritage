@@ -35,6 +35,16 @@ function EventForm({ initialData, type = "create" }: Props) {
         event.images = await uploadImagesToFirebaseAndGetUrls(
           newlySelectedImages.map((image: any) => image.file)
         );
+        
+        // Process ticket types - use customName if Custom is selected
+        if (event.ticketTypes) {
+          event.ticketTypes = event.ticketTypes.map((ticket: any) => ({
+            ...ticket,
+            name: ticket.name === "Custom" && ticket.customName ? ticket.customName : ticket.name,
+            customName: undefined, // Remove customName from final data
+          }));
+        }
+        
         await axios.post("/api/admin/events", event);
         toast.success("Museum created successfully");
         // Use hard redirect to force page reload and bypass cache
@@ -49,6 +59,15 @@ function EventForm({ initialData, type = "create" }: Props) {
           toast.error("Museum ID is required for updating");
           return;
         }
+        // Process ticket types - use customName if Custom is selected
+        if (event.ticketTypes) {
+          event.ticketTypes = event.ticketTypes.map((ticket: any) => ({
+            ...ticket,
+            name: ticket.name === "Custom" && ticket.customName ? ticket.customName : ticket.name,
+            customName: undefined, // Remove customName from final data
+          }));
+        }
+        
         await axios.put(`/api/admin/events/${eventId}`, event);
         toast.success("Museum updated successfully");
         // Use hard redirect to force page reload and bypass cache
