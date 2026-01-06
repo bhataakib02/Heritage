@@ -11,6 +11,16 @@ export default function LandingPage() {
     const router = useRouter();
     const [hasRedirected, setHasRedirected] = React.useState(false);
 
+    // Redirect authenticated users ONCE - prevent loops
+    // MUST be called before any early returns (React hooks rule)
+    useEffect(() => {
+        if (isLoaded && isSignedIn && !hasRedirected) {
+            setHasRedirected(true);
+            // Use replace to avoid adding to history
+            router.replace("/home");
+        }
+    }, [isLoaded, isSignedIn, hasRedirected, router]);
+
     // Wait for Clerk to load before checking auth status
     if (!isLoaded) {
         return (
@@ -22,15 +32,6 @@ export default function LandingPage() {
             </div>
         );
     }
-
-    // Redirect authenticated users ONCE - prevent loops
-    useEffect(() => {
-        if (isLoaded && isSignedIn && !hasRedirected) {
-            setHasRedirected(true);
-            // Use replace to avoid adding to history
-            router.replace("/home");
-        }
-    }, [isLoaded, isSignedIn, hasRedirected, router]);
 
     // Show loading only during redirect
     if (isSignedIn && !hasRedirected) {
