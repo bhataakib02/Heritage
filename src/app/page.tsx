@@ -136,7 +136,7 @@ export default function LandingPage() {
             </section>
 
             {/* Features Section */}
-            <section className="py-20 md:py-32 bg-white">
+            <section className="py-20 md:py-32 bg-gradient-to-br from-white via-blue-50 to-purple-50">
                 <div className="container mx-auto px-6">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -191,7 +191,7 @@ export default function LandingPage() {
             </section>
 
             {/* Additional Features Grid */}
-            <section className="py-20 md:py-32 bg-gradient-to-br from-gray-50 to-white">
+            <section className="py-20 md:py-32 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
                 <div className="container mx-auto px-6">
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
                         <div className="text-center p-6 rounded-xl bg-white shadow-md hover:shadow-lg transition-all">
