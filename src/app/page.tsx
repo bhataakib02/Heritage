@@ -151,7 +151,7 @@ export default function LandingPage() {
                         </div>
                         <div className="flex items-center gap-2">
                             <i className="ri-star-fill text-2xl text-yellow-400"></i>
-                            <span className="font-semibold">10,000+ Happy Users</span>
+                            <span className="font-semibold">Happy Users</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <i className="ri-refund-line text-2xl text-primary"></i>
