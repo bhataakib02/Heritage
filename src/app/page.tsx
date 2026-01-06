@@ -218,16 +218,16 @@ export default function LandingPage() {
             </section>
 
             {/* Footer */}
-            <footer className="bg-gray-900 text-gray-400 py-12">
+            <footer className="bg-gray-900 text-gray-400 py-6">
                 <div className="container mx-auto px-6">
                     <div className="text-center">
-                        <h3 className="text-white text-xl font-bold mb-4">
+                        <h3 className="text-white text-lg font-bold mb-2">
                             <span className="text-primary">HERITAGE</span> WORLD
                         </h3>
-                        <p className="text-sm mb-6 max-w-2xl mx-auto">
+                        <p className="text-xs mb-3 max-w-2xl mx-auto">
                             Your gateway to cultural heritage and museum experiences.
                         </p>
-                        <div className="border-t border-gray-800 pt-6 text-sm">
+                        <div className="border-t border-gray-800 pt-3 text-xs">
                             <p>&copy; 2024 Heritage World. All rights reserved. Developed by Bhat Aakib</p>
                         </div>
                     </div>
