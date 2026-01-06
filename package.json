@@ -1,0 +1,44 @@
+{
+  "name": "heritage-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "migrate:supabase": "tsx scripts/migrate-to-supabase.ts",
+    "make-admin": "tsx scripts/make-user-admin.ts",
+    "add-dummy-data": "tsx scripts/add-dummy-data.ts",
+    "add-dummy-bookings": "tsx scripts/add-dummy-bookings.ts"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^4.26.1",
+    "@nextui-org/react": "^2.4.6",
+    "@stripe/react-stripe-js": "^2.8.0",
+    "@stripe/stripe-js": "^4.4.0",
+    "@supabase/supabase-js": "^2.89.0",
+    "axios": "^1.7.4",
+    "dayjs": "^1.11.13",
+    "firebase": "^10.5.2",
+    "framer-motion": "^11.3.29",
+    "mongoose": "^8.5.3",
+    "next": "14.0.1",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hot-toast": "^2.4.1",
+    "remixicon": "^4.3.0",
+    "stripe": "^16.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "dotenv": "^17.2.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5"
+  }
+}
