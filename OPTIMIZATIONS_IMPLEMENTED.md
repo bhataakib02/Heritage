@@ -1,6 +1,6 @@
 # Optimizations Implemented
 
-This document summarizes all the optimizations that have been implemented from the ADMIN_OPTIMIZATION_GUIDE.md and SIGNIN_OPTIMIZATION_GUIDE.md.
+This document summarizes all the optimizations that have been implemented for the Heritage App.
 
 ## ✅ Performance Optimizations
 
