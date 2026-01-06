@@ -117,7 +117,7 @@ function LayoutProviders({ children }: { children: React.ReactNode }) {
                 <div className="bg-white flex justify-between items-center shadow px-3 py-5">
                     <h1
                         className="font-semibold tect-2xl cursor-pointer text-blue-900"
-                        onClick={() => router.push("/")}
+                        onClick={() => router.push("/home")}
                     >HERITAGE WORLD</h1>
 
                     <div className="flex gap-5 items-center">

@@ -7,8 +7,34 @@ import { useEffect, useState } from "react";
 
 export default function LandingPage() {
     const { isSignedIn, isLoaded } = useUser();
-    const router = useRouter();
-    const [hasRedirected, setHasRedirected] = useState(false);
+
+    // Wait for Clerk to load
+    if (!isLoaded) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading...</p>
+                </div>
+            </div>
+        );
+    }
+
+    // If somehow an authenticated user reaches here (shouldn't happen due to middleware),
+    // redirect immediately without showing content
+    if (isSignedIn) {
+        if (typeof window !== 'undefined') {
+            window.location.replace('/home');
+        }
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-gray-600">Redirecting...</p>
+                </div>
+            </div>
+        );
+    }
 
     // Middleware handles redirect for authenticated users
     // This component only renders for unauthenticated users
