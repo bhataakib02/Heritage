@@ -4,10 +4,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { useEffect } from "react";
+import React from "react";
 
 export default function LandingPage() {
     const { isSignedIn, isLoaded } = useUser();
     const router = useRouter();
+    const [hasRedirected, setHasRedirected] = React.useState(false);
 
     // Wait for Clerk to load before checking auth status
     if (!isLoaded) {
@@ -21,8 +23,26 @@ export default function LandingPage() {
         );
     }
 
-    // Don't redirect here - middleware handles it
-    // Just show landing page content for unauthenticated users
+    // Redirect authenticated users ONCE - prevent loops
+    useEffect(() => {
+        if (isLoaded && isSignedIn && !hasRedirected) {
+            setHasRedirected(true);
+            // Use replace to avoid adding to history
+            router.replace("/home");
+        }
+    }, [isLoaded, isSignedIn, hasRedirected, router]);
+
+    // Show loading only during redirect
+    if (isSignedIn && !hasRedirected) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-gray-600">Redirecting...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
