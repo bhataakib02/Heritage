@@ -69,7 +69,20 @@ async function addDummyBookings() {
     console.log(`Found ${users.length} users and ${events.length} events`);
     console.log("Creating dummy bookings...\n");
 
-    const dummyBookings = [];
+    interface DummyBooking {
+        id: string;
+        event: string;
+        user: string;
+        paymentId: string;
+        ticketType: string;
+        ticketsCount: number;
+        totalAmount: number;
+        status: string;
+        created_at: string;
+        updated_at: string;
+    }
+
+    const dummyBookings: DummyBooking[] = [];
     const statuses = ["booked", "booked", "booked", "cancelled"]; // 75% booked, 25% cancelled
 
     // Create multiple bookings for each user across different events
