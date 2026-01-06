@@ -46,16 +46,16 @@ function EventForm({ initialData, type = "create" }: Props) {
         event.images = [...alreadyUploadedImages, ...newlyUploadedImageUrls];
         const eventId = String(event.id || event._id || '');
         if (!eventId) {
-          toast.error("Event ID is required for updating");
+          toast.error("Museum ID is required for updating");
           return;
         }
         await axios.put(`/api/admin/events/${eventId}`, event);
-        toast.success("Event updated successfully");
+        toast.success("Museum updated successfully");
         // Use hard redirect to force page reload and bypass cache
         window.location.href = "/admin/events";
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || error.message || "Failed to save event");
+      toast.error(error.response?.data?.message || error.message || "Failed to save museum");
     } finally {
       setLoading(false);
     }
