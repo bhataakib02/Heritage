@@ -131,21 +131,15 @@ export default function LandingPage() {
         );
     }
 
-    // Get featured museums (first 3 with images) - always show 3
-    const featuredMuseums = events
-        .filter(e => e.images && e.images.length > 0)
-        .slice(0, 3);
+    // Get featured museums - prioritize those with images, always show 3
+    const museumsWithImages = events.filter(e => e.images && e.images.length > 0);
+    const museumsWithoutImages = events.filter(e => !e.images || e.images.length === 0);
     
-    // If we have less than 3, pad with placeholders
-    const displayMuseums = [...featuredMuseums];
-    while (displayMuseums.length < 3 && displayMuseums.length < events.length) {
-        const remaining = events.filter(e => !displayMuseums.includes(e));
-        if (remaining.length > 0) {
-            displayMuseums.push(remaining[0]);
-        } else {
-            break;
-        }
-    }
+    // Combine: first take museums with images, then fill with others if needed
+    const displayMuseums = [
+        ...museumsWithImages.slice(0, 3),
+        ...museumsWithoutImages.slice(0, Math.max(0, 3 - museumsWithImages.length))
+    ].slice(0, 3);
 
     return (
         <div className="min-h-screen bg-white">
@@ -190,20 +184,28 @@ export default function LandingPage() {
                     <div className="max-w-6xl mx-auto mt-12">
                         <div className="grid md:grid-cols-3 gap-4">
                             {displayMuseums.length > 0 ? (
-                                displayMuseums.slice(0, 3).map((museum, index) => (
-                                    <div
-                                        key={museum.id || museum._id || index}
-                                        className="relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105"
-                                    >
-                                        <div className="aspect-video bg-gray-200 overflow-hidden">
-                                            <img
-                                                src={museum.images?.[0] || '/placeholder-image.jpg'}
-                                                alt={museum.name || 'Museum'}
-                                                className="w-full h-full object-cover"
-                                            />
+                                displayMuseums.map((museum, index) => {
+                                    const imageUrl = museum.images?.[0] || 
+                                                   'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&h=600&fit=crop' ||
+                                                   '/placeholder-image.jpg';
+                                    return (
+                                        <div
+                                            key={museum.id || museum._id || index}
+                                            className="relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer"
+                                        >
+                                            <div className="aspect-video bg-gray-200 overflow-hidden">
+                                                <img
+                                                    src={imageUrl}
+                                                    alt={museum.name || 'Museum'}
+                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                                    onError={(e) => {
+                                                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&h=600&fit=crop';
+                                                    }}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                ))
+                                    );
+                                })
                             ) : (
                                 // Show placeholder images if no museums
                                 [...Array(3)].map((_, index) => (
@@ -213,7 +215,7 @@ export default function LandingPage() {
                                     >
                                         <div className="aspect-video bg-gray-200 overflow-hidden">
                                             <img
-                                                src="/placeholder-image.jpg"
+                                                src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&h=600&fit=crop"
                                                 alt="Museum"
                                                 className="w-full h-full object-cover"
                                             />
