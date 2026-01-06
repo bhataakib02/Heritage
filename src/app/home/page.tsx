@@ -29,59 +29,43 @@ export default async function Home({ searchParams }: Props) {
     redirect("/");
   }
 
-  // Connect to DB only when needed (non-blocking)
-  connectDB().catch(error => {
-    console.error("Database connection error:", error);
-  });
-
-  // Handle user registration in background (don't block page load)
-  try {
-    await handleNewUserRegistration();
-  } catch (error) {
-    // Silently handle registration errors
-    console.log("User registration check:", error);
-  }
-
-  // Get user ID (non-blocking)
-  try {
-    await getUserIdOfLoggedInUser();
-  } catch (error) {
-    // Silently handle
-    console.log("User ID check:", error);
-  }
-
-  let filters: any = {};
-  if (searchParams.name) {
-    filters = {
-      name: {
-        $regex: searchParams.name,
-        $options: "i",
-      },
-    };
-  }
-
-  if (searchParams.date) {
-    filters = {
-      ...filters,
-      date: searchParams.date,
-    };
-  }
-
+  // Fetch events first (most important)
   let events: EventType[] = [];
   try {
-    events = (await EventModel.find(filters, {
+    events = (await EventModel.find({}, {
       sort: { created_at: -1 }
     })) as any;
   } catch (error: any) {
     console.error("Error fetching events:", error);
-    // Return empty array on error instead of crashing
     events = [];
+  }
+
+  // Handle user registration and DB connection in background (don't block)
+  Promise.all([
+    connectDB().catch(() => {}),
+    handleNewUserRegistration().catch(() => {}),
+    getUserIdOfLoggedInUser().catch(() => {})
+  ]).catch(() => {}); // Ignore all errors
+
+  // Apply filters if provided
+  let filteredEvents = events;
+  if (searchParams.name) {
+    const nameFilter = searchParams.name.toLowerCase();
+    filteredEvents = filteredEvents.filter((event: any) =>
+      event.name?.toLowerCase().includes(nameFilter)
+    );
+  }
+
+  if (searchParams.date) {
+    filteredEvents = filteredEvents.filter((event: any) =>
+      event.date === searchParams.date
+    );
   }
   return (
     <div>
       <Filters />
       <div className="flex flex-col gap-5">
-        {events.map((event) => (
+        {filteredEvents.map((event) => (
           <div
             key={event.id || (event as any)._id}
             className="grid grid-cols-1 md:grid-cols-3 bg-white rounded-sm md:gap-10 border border-gray-200"
@@ -125,10 +109,10 @@ export default async function Home({ searchParams }: Props) {
         ))}
       </div>
 
-      {events.length === 0 && (
+      {filteredEvents.length === 0 && (
         <div className="w-full mt-100 flex justify-center">
           <h1 className="text-sm">
-            No museums found for your search
+            {events.length === 0 ? "No museums available" : "No museums found for your search"}
           </h1>
         </div>
       )}
