@@ -21,20 +21,21 @@ export default function LandingPage() {
         );
     }
 
-    // If user is already signed in, redirect to home page
+    // If user is already signed in, redirect to home page immediately
     useEffect(() => {
         if (isLoaded && isSignedIn) {
-            router.push("/home");
+            // Use window.location for immediate redirect to avoid React state issues
+            window.location.href = "/home";
         }
-    }, [isLoaded, isSignedIn, router]);
+    }, [isLoaded, isSignedIn]);
 
     // Show loading while redirecting authenticated users
-    if (isSignedIn) {
+    if (isSignedIn && isLoaded) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-gray-600">Redirecting...</p>
+                    <p className="text-gray-600">Redirecting to dashboard...</p>
                 </div>
             </div>
         );
