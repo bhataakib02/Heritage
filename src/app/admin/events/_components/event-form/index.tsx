@@ -37,8 +37,8 @@ function EventForm({ initialData, type = "create" }: Props) {
         );
         await axios.post("/api/admin/events", event);
         toast.success("Museum created successfully");
-        router.refresh();
-        router.push("/admin/events");
+        // Use hard redirect to force page reload and bypass cache
+        window.location.href = "/admin/events";
       } else {
         const newlyUploadedImageUrls = await uploadImagesToFirebaseAndGetUrls(
           newlySelectedImages.map((image: any) => image.file)
@@ -51,11 +51,11 @@ function EventForm({ initialData, type = "create" }: Props) {
         }
         await axios.put(`/api/admin/events/${eventId}`, event);
         toast.success("Event updated successfully");
+        // Use hard redirect to force page reload and bypass cache
+        window.location.href = "/admin/events";
       }
-      router.refresh();
-      router.push("/admin/events");
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error.message || "Failed to save event");
     } finally {
       setLoading(false);
     }

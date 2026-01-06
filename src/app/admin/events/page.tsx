@@ -5,10 +5,18 @@ import { Link } from '@nextui-org/react'
 import React from 'react'
 import EventsTableWithFeatures from './_components/events-table-with-features'
 import { connectDB } from '@/config/dbConfig'
-connectDB()
+
+// Disable caching to ensure fresh data on Vercel
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 async function EventsPage() {
     try {
+        // Connect to database (non-blocking)
+        await connectDB().catch(error => {
+            console.error("Database connection error:", error);
+        });
+
         const events: EventType[] = (await EventModel.find({}, {
             sort: { created_at: -1 }
         })) as any;
