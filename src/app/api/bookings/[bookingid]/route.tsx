@@ -14,6 +14,8 @@ export async function PUT(
         if (!userId)
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         const reqBody = await request.json();
+        // Ensure updated_at is set automatically
+        reqBody.updated_at = new Date().toISOString();
         await BookingModel.findByIdAndUpdate(params.bookingid, reqBody);
         return NextResponse.json(
             { message: "Booking updated successfully" },

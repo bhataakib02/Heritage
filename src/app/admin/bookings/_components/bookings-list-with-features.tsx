@@ -130,16 +130,16 @@ function BookingsListWithFeatures({ bookings }: { bookings: BookingType[] }) {
                         <div className="bg-gray-700 p-4 text-white flex md:flex-row flex-col justify-between md:items-center">
                             <div className="lg:w-full">
                                 <h1 className="md:text-2xl text-xl font-semibold w-full">
-                                    {booking?.event?.name || "Event name not available"}
+                                    {(typeof booking?.event === 'object' && booking?.event?.name) || "Event name not available"}
                                 </h1>
                                 <div className="text-sm flex md:flex-row flex-col gap-5 md:gap-10 text-gray-200">
                                     <h1>
                                         <i className="ri-map-pin-line pr-2"></i>{" "}
-                                        {booking?.event?.location || "Location not available"}
+                                        {(typeof booking?.event === 'object' && booking?.event?.location) || "Location not available"}
                                     </h1>
                                     <h1>
                                         <i className="ri-calendar-line pr-2"></i>{" "}
-                                        {booking?.event?.date || "Date not available"} at {booking?.event?.time || "Time not available"}
+                                        {(typeof booking?.event === 'object' && booking?.event?.date) || "Date not available"} at {(typeof booking?.event === 'object' && booking?.event?.time) || "Time not available"}
                                     </h1>
                                 </div>
                             </div>

@@ -21,6 +21,9 @@ export async function PUT(
         delete reqBody.id;
         delete reqBody._id;
         
+        // Ensure updated_at is set automatically
+        reqBody.updated_at = new Date().toISOString();
+        
         await UserModel.findByIdAndUpdate(params.userid, reqBody);
         return NextResponse.json(
             { message: "User updated successfully" },
