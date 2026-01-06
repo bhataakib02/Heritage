@@ -217,146 +217,19 @@ export default function LandingPage() {
                 </div>
             </section>
 
-            {/* Testimonials Section */}
-            <section className="py-20 md:py-32 bg-white">
-                <div className="container mx-auto px-6">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                            What Our Users Say
-                        </h2>
-                        <p className="text-xl text-gray-600">
-                            Join thousands of satisfied cultural enthusiasts
-                        </p>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                        <div className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl shadow-lg border border-gray-100">
-                            <div className="flex items-center gap-1 mb-4 text-yellow-400">
-                                {[...Array(5)].map((_, i) => (
-                                    <i key={i} className="ri-star-fill"></i>
-                                ))}
-                            </div>
-                            <p className="text-gray-700 mb-6 leading-relaxed">
-                                "Heritage World has completely transformed how I explore museums. The booking process is seamless and I've discovered so many amazing exhibitions!"
-                            </p>
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
-                                    <i className="ri-user-line text-primary text-xl"></i>
-                                </div>
-                                <div>
-                                    <div className="font-semibold text-gray-900">Sarah Johnson</div>
-                                    <div className="text-sm text-gray-600">Art Enthusiast</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl shadow-lg border border-gray-100">
-                            <div className="flex items-center gap-1 mb-4 text-yellow-400">
-                                {[...Array(5)].map((_, i) => (
-                                    <i key={i} className="ri-star-fill"></i>
-                                ))}
-                            </div>
-                            <p className="text-gray-700 mb-6 leading-relaxed">
-                                "As a history teacher, I use Heritage World to plan educational trips. The variety of museums and easy booking system makes it perfect for group visits."
-                            </p>
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
-                                    <i className="ri-user-line text-primary text-xl"></i>
-                                </div>
-                                <div>
-                                    <div className="font-semibold text-gray-900">Michael Chen</div>
-                                    <div className="text-sm text-gray-600">History Teacher</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl shadow-lg border border-gray-100">
-                            <div className="flex items-center gap-1 mb-4 text-yellow-400">
-                                {[...Array(5)].map((_, i) => (
-                                    <i key={i} className="ri-star-fill"></i>
-                                ))}
-                            </div>
-                            <p className="text-gray-700 mb-6 leading-relaxed">
-                                "The best platform for museum lovers! I've booked tickets to exclusive exhibitions I never would have found otherwise. Highly recommend!"
-                            </p>
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
-                                    <i className="ri-user-line text-primary text-xl"></i>
-                                </div>
-                                <div>
-                                    <div className="font-semibold text-gray-900">Emily Rodriguez</div>
-                                    <div className="text-sm text-gray-600">Museum Curator</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             {/* Footer */}
-            <footer className="bg-gray-900 text-gray-400 py-16">
+            <footer className="bg-gray-900 text-gray-400 py-12">
                 <div className="container mx-auto px-6">
-                    <div className="grid md:grid-cols-4 gap-8 mb-12">
-                        <div>
-                            <h3 className="text-white text-2xl font-bold mb-4">
-                                <span className="text-primary">HERITAGE</span> WORLD
-                            </h3>
-                            <p className="text-sm leading-relaxed mb-4">
-                                Your gateway to cultural heritage and museum experiences. Discover, explore, and connect with history.
-                            </p>
-                            <div className="flex gap-4">
-                                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
-                                    <i className="ri-facebook-fill"></i>
-                                </a>
-                                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
-                                    <i className="ri-twitter-fill"></i>
-                                </a>
-                                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
-                                    <i className="ri-instagram-fill"></i>
-                                </a>
-                                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
-                                    <i className="ri-linkedin-fill"></i>
-                                </a>
-                            </div>
+                    <div className="text-center">
+                        <h3 className="text-white text-xl font-bold mb-4">
+                            <span className="text-primary">HERITAGE</span> WORLD
+                        </h3>
+                        <p className="text-sm mb-6 max-w-2xl mx-auto">
+                            Your gateway to cultural heritage and museum experiences.
+                        </p>
+                        <div className="border-t border-gray-800 pt-6 text-sm">
+                            <p>&copy; 2024 Heritage World. All rights reserved. Developed by Bhat Aakib</p>
                         </div>
-                        <div>
-                            <h4 className="text-white font-semibold mb-4">Explore</h4>
-                            <ul className="space-y-3 text-sm">
-                                <li><Link href="/sign-up" className="hover:text-primary transition-colors flex items-center gap-2"><i className="ri-arrow-right-s-line"></i> Museums</Link></li>
-                                <li><Link href="/sign-up" className="hover:text-primary transition-colors flex items-center gap-2"><i className="ri-arrow-right-s-line"></i> Events</Link></li>
-                                <li><Link href="/sign-up" className="hover:text-primary transition-colors flex items-center gap-2"><i className="ri-arrow-right-s-line"></i> Exhibitions</Link></li>
-                                <li><Link href="/sign-up" className="hover:text-primary transition-colors flex items-center gap-2"><i className="ri-arrow-right-s-line"></i> Guided Tours</Link></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 className="text-white font-semibold mb-4">Account</h4>
-                            <ul className="space-y-3 text-sm">
-                                <li><Link href="/sign-in" className="hover:text-primary transition-colors flex items-center gap-2"><i className="ri-arrow-right-s-line"></i> Sign In</Link></li>
-                                <li><Link href="/sign-up" className="hover:text-primary transition-colors flex items-center gap-2"><i className="ri-arrow-right-s-line"></i> Sign Up</Link></li>
-                                <li><Link href="/sign-up" className="hover:text-primary transition-colors flex items-center gap-2"><i className="ri-arrow-right-s-line"></i> My Bookings</Link></li>
-                                <li><Link href="/sign-up" className="hover:text-primary transition-colors flex items-center gap-2"><i className="ri-arrow-right-s-line"></i> Profile</Link></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 className="text-white font-semibold mb-4">Contact</h4>
-                            <ul className="space-y-3 text-sm">
-                                <li className="flex items-center gap-2">
-                                    <i className="ri-mail-line text-primary"></i>
-                                    support@heritageworld.com
-                                </li>
-                                <li className="flex items-center gap-2">
-                                    <i className="ri-phone-line text-primary"></i>
-                                    +1 (555) 123-4567
-                                </li>
-                                <li className="flex items-center gap-2">
-                                    <i className="ri-map-pin-line text-primary"></i>
-                                    Global Service
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="border-t border-gray-800 pt-8 text-center text-sm">
-                        <p>&copy; 2024 Heritage World. All rights reserved. Developed by Bhat Aakib</p>
                     </div>
                 </div>
             </footer>
