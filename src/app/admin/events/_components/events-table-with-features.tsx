@@ -256,9 +256,10 @@ function EventsTableWithFeatures({ events }: { events: EventType[] }) {
                         <TableColumn className="bg-gray-700 text-white font-semibold">Actions</TableColumn>
                     </TableHeader>
                     <TableBody>
-                        {paginatedEvents.map((event) => {
+                        {paginatedEvents
+                            .filter((event) => event.id || event._id)
+                            .map((event) => {
                             const eventId = String(event.id || event._id || '');
-                            if (!eventId) return null;
                             return (
                                 <TableRow key={eventId}>
                                     <TableCell>
