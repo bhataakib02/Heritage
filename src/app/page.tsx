@@ -18,11 +18,21 @@ interface Props {
 }
 
 export default async function Home({ searchParams }: Props) {
-  await handleNewUserRegistration();
+  try {
+    await handleNewUserRegistration();
+  } catch (error) {
+    // Silently handle registration errors (user might not be logged in)
+    console.log("User registration check:", error);
+  }
 
-  await getUserIdOfLoggedInUser();
+  try {
+    await getUserIdOfLoggedInUser();
+  } catch (error) {
+    // Silently handle - user might not be logged in yet
+    console.log("User ID check:", error);
+  }
 
-  let filters = {};
+  let filters: any = {};
   if (searchParams.name) {
     filters = {
       name: {
@@ -39,9 +49,16 @@ export default async function Home({ searchParams }: Props) {
     };
   }
 
-  const events: EventType[] = (await EventModel.find(filters, {
-    sort: { created_at: -1 }
-  })) as any;
+  let events: EventType[] = [];
+  try {
+    events = (await EventModel.find(filters, {
+      sort: { created_at: -1 }
+    })) as any;
+  } catch (error: any) {
+    console.error("Error fetching events:", error);
+    // Return empty array on error instead of crashing
+    events = [];
+  }
   return (
     <div>
       <Filters />
@@ -53,7 +70,7 @@ export default async function Home({ searchParams }: Props) {
           >
             <div className="col-span-1">
               <img
-                src={event.images[0]}
+                src={event.images?.[0] || '/placeholder-image.jpg'}
                 alt="Picture of the museum"
                 height={130}
                 width={250}

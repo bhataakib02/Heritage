@@ -266,15 +266,21 @@ export const handleNewUserRegistration = async () => {
 export const getUserIdOfLoggedInUser = async () => {
     try {
         const loggedInUser = await currentUser();
+        if (!loggedInUser) {
+            return null; // User not logged in, return null instead of throwing
+        }
         const userInDb = await UserModel.findOne({
-            clerkUserId: loggedInUser?.id,
+            clerkUserId: loggedInUser.id,
         });
         if (userInDb) {
             // Extract ID (Supabase uses 'id' field)
             return extractId(userInDb);
         }
+        return null; // User not found in database
     } catch (error: any) {
-        throw new Error(error);
+        // Don't throw error, just return null if user is not logged in
+        console.log("Error getting user ID:", error);
+        return null;
     }
 };
 
