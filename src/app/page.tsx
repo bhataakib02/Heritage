@@ -34,7 +34,12 @@ export default function LandingPage() {
             try {
                 const response = await axios.get('/api/events/public');
                 if (response.data.success) {
-                    setEvents(response.data.events || []);
+                    const fetchedEvents = response.data.events || [];
+                    setEvents(fetchedEvents);
+                    console.log("Fetched events:", fetchedEvents.length);
+                } else {
+                    console.error("API returned success: false");
+                    setEvents([]);
                 }
             } catch (error) {
                 console.error("Error fetching events:", error);
@@ -71,7 +76,24 @@ export default function LandingPage() {
     // Filter events based on search for display
     const filteredEvents = events.filter((event) => {
         const nameMatch = !searchName || event.name?.toLowerCase().includes(searchName.toLowerCase());
-        const dateMatch = !searchDate || event.date === searchDate;
+        
+        // Handle date matching - convert both to same format for comparison
+        let dateMatch = true;
+        if (searchDate) {
+            // Convert searchDate to YYYY-MM-DD format if needed
+            let searchDateFormatted = searchDate;
+            if (searchDate.includes('-') && searchDate.split('-')[0].length === 2) {
+                // Format: DD-MM-YYYY -> YYYY-MM-DD
+                const [day, month, year] = searchDate.split('-');
+                searchDateFormatted = `${year}-${month}-${day}`;
+            }
+            
+            // Compare dates (handle both formats)
+            const eventDate = event.date || '';
+            dateMatch = eventDate === searchDate || eventDate === searchDateFormatted || 
+                       eventDate.includes(searchDate) || searchDate.includes(eventDate);
+        }
+        
         return nameMatch && dateMatch;
     });
 
@@ -153,7 +175,7 @@ export default function LandingPage() {
                     <div className="max-w-5xl mx-auto">
                         <form onSubmit={handleSearch} className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 border border-gray-200">
                             <div className="grid md:grid-cols-2 gap-4 mb-4">
-                                <div>
+                                <div className="relative">
                                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                                         <i className="ri-search-line mr-2"></i>
                                         Search Museum
@@ -161,10 +183,66 @@ export default function LandingPage() {
                                     <input
                                         type="text"
                                         value={searchName}
-                                        onChange={(e) => setSearchName(e.target.value)}
+                                        onChange={(e) => {
+                                            setSearchName(e.target.value);
+                                            setShowDropdown(true);
+                                        }}
+                                        onFocus={() => {
+                                            setSearchFocused(true);
+                                            setShowDropdown(true);
+                                        }}
+                                        onBlur={() => {
+                                            // Delay to allow dropdown click
+                                            setTimeout(() => {
+                                                setSearchFocused(false);
+                                                setShowDropdown(false);
+                                            }, 300);
+                                        }}
+                                        onClick={() => {
+                                            setSearchFocused(true);
+                                            setShowDropdown(true);
+                                        }}
                                         placeholder="Enter museum name..."
                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                                     />
+                                    {/* Dropdown Suggestions */}
+                                    {showDropdown && searchFocused && (
+                                        <div className="absolute z-[100] w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-2xl max-h-60 overflow-y-auto">
+                                            {searchName && searchSuggestions.length > 0 ? (
+                                                // Show filtered suggestions when typing
+                                                searchSuggestions.map((event) => (
+                                                    <button
+                                                        key={event.id || event._id}
+                                                        type="button"
+                                                        onMouseDown={(e) => e.preventDefault()}
+                                                        onClick={() => handleMuseumSelect(event.name)}
+                                                        className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0"
+                                                    >
+                                                        <div className="font-semibold text-gray-900">{event.name}</div>
+                                                        <div className="text-sm text-gray-600">{event.location}</div>
+                                                    </button>
+                                                ))
+                                            ) : !searchName && events.length > 0 ? (
+                                                // Show all museums when no search text
+                                                events.slice(0, 10).map((event) => (
+                                                    <button
+                                                        key={event.id || event._id}
+                                                        type="button"
+                                                        onMouseDown={(e) => e.preventDefault()}
+                                                        onClick={() => handleMuseumSelect(event.name)}
+                                                        className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0"
+                                                    >
+                                                        <div className="font-semibold text-gray-900">{event.name}</div>
+                                                        <div className="text-sm text-gray-600">{event.location}</div>
+                                                    </button>
+                                                ))
+                                            ) : (
+                                                <div className="px-4 py-3 text-gray-500 text-sm">
+                                                    No museums found
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-2">
