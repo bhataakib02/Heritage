@@ -5,12 +5,13 @@ import { authMiddleware } from "@clerk/nextjs";
 export default authMiddleware({
     // Allow signed out users to access the specified routes:
     publicRoutes: [
-        '/',
         '/sign-in',
         '/sign-up',
         '/api/webhooks(.*)',
         '/api/current-user',
     ],
+    // Redirect unauthenticated users to sign-in
+    signInUrl: '/sign-in',
 });
 
 export const config = {
