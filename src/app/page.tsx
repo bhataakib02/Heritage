@@ -7,6 +7,16 @@ import { useEffect, useState } from "react";
 
 export default function LandingPage() {
     const { isSignedIn, isLoaded } = useUser();
+    const [scrolled, setScrolled] = useState(false);
+
+    // Handle scroll for sticky navbar
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     // Wait for Clerk to load
     if (!isLoaded) {
@@ -18,7 +28,7 @@ export default function LandingPage() {
                 </div>
             </div>
         );
-  }
+    }
 
     // If somehow an authenticated user reaches here (shouldn't happen due to middleware),
     // redirect immediately without showing content
@@ -36,230 +46,353 @@ export default function LandingPage() {
         );
     }
 
-    // Middleware handles redirect for authenticated users
-    // This component only renders for unauthenticated users
-
-  return (
+    return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
-            {/* Navigation */}
-            <nav className="container mx-auto px-6 py-6 flex justify-between items-center">
-                <div className="text-2xl font-bold text-gray-900">
-                    <span className="text-primary">HERITAGE</span> WORLD
+            {/* Sticky Navigation */}
+            <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+                scrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
+            }`}>
+                <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+                    <div className="text-2xl md:text-3xl font-bold text-gray-900">
+                        <span className="text-primary">HERITAGE</span> WORLD
+                    </div>
+                    <div className="flex gap-4 items-center">
+                        <Link
+                            href="/sign-in"
+                            className="px-4 md:px-6 py-2 text-gray-700 hover:text-primary transition-colors font-medium"
+                        >
+                            Sign In
+                        </Link>
+                        <Link
+                            href="/sign-up"
+                            className="px-4 md:px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all shadow-md hover:shadow-lg font-medium transform hover:scale-105"
+                        >
+                            Get Started
+                        </Link>
+                    </div>
                 </div>
-                <div className="flex gap-4">
-                    {isSignedIn ? (
-                        <>
-                            <Link
-                                href="/home"
-                                className="px-6 py-2 text-gray-700 hover:text-primary transition-colors font-medium"
-                            >
-                                Home
-                            </Link>
-                            <Link
-                                href="/bookings"
-                                className="px-6 py-2 text-gray-700 hover:text-primary transition-colors font-medium"
-          >
-                                My Bookings
-                            </Link>
-                        </>
-                    ) : (
-                        <>
-                            <Link
-                                href="/sign-in"
-                                className="px-6 py-2 text-gray-700 hover:text-primary transition-colors font-medium"
-                            >
-                                Sign In
-                            </Link>
-                            <Link
-                                href="/sign-up"
-                                className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all shadow-md hover:shadow-lg font-medium"
-                            >
-                                Get Started
-                            </Link>
-                        </>
-                    )}
-            </div>
             </nav>
 
             {/* Hero Section */}
-            <section className="container mx-auto px-6 py-20 text-center">
-                <div className="max-w-4xl mx-auto">
-                    <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                        Explore Cultural
-                        <span className="text-primary block">Heritage</span>
-                  </h1>
-                    <p className="text-xl text-gray-600 mb-10 leading-relaxed">
-                        Discover and book museum events, exhibitions, and cultural heritage experiences.
-                        Connect with history, art, and culture in one place.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        {isSignedIn ? (
+            <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
+                {/* Background decoration */}
+                <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
+                    <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
+                </div>
+                
+                <div className="container mx-auto px-6 text-center relative z-10">
+                    <div className="max-w-5xl mx-auto">
+                        {/* Badge */}
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-6 animate-fade-in">
+                            <i className="ri-star-fill"></i>
+                            <span>Trusted by 10,000+ Cultural Enthusiasts</span>
+                        </div>
+                        
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-gray-900 mb-6 leading-tight animate-fade-in-up">
+                            Explore Cultural
+                            <span className="text-primary block mt-2">Heritage</span>
+                        </h1>
+                        
+                        <p className="text-xl md:text-2xl text-gray-600 mb-10 leading-relaxed max-w-3xl mx-auto animate-fade-in-up delay-100">
+                            Discover and book museum events, exhibitions, and cultural heritage experiences.
+                            Connect with history, art, and culture in one place.
+                        </p>
+                        
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-fade-in-up delay-200">
                             <Link
-                                href="/home"
-                                className="px-8 py-4 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl font-semibold text-lg"
+                                href="/sign-up"
+                                className="px-8 py-4 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl font-semibold text-lg transform hover:scale-105 flex items-center justify-center gap-2"
                             >
-                                Explore Museums
+                                <span>Start Exploring</span>
+                                <i className="ri-arrow-right-line"></i>
                             </Link>
-                        ) : (
-                            <>
-                                <Link
-                                    href="/sign-up"
-                                    className="px-8 py-4 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl font-semibold text-lg"
-                                >
-                                    Start Exploring
-                                </Link>
-                                <Link
-                                    href="/sign-in"
-                                    className="px-8 py-4 bg-white text-primary border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all shadow-lg hover:shadow-xl font-semibold text-lg"
-                                >
-                                    Sign In
-                                </Link>
-                            </>
-                        )}
+                            <Link
+                                href="/sign-in"
+                                className="px-8 py-4 bg-white text-primary border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all shadow-lg hover:shadow-xl font-semibold text-lg transform hover:scale-105"
+                            >
+                                Sign In
+                            </Link>
+                        </div>
+
+                        {/* Stats Preview */}
+                        <div className="grid grid-cols-3 gap-6 md:gap-12 max-w-2xl mx-auto mt-16 animate-fade-in-up delay-300">
+                            <div className="text-center">
+                                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">500+</div>
+                                <div className="text-sm md:text-base text-gray-600">Museums</div>
+                            </div>
+                            <div className="text-center">
+                                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">10K+</div>
+                                <div className="text-sm md:text-base text-gray-600">Users</div>
+                            </div>
+                            <div className="text-center">
+                                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">50K+</div>
+                                <div className="text-sm md:text-base text-gray-600">Bookings</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
             {/* Features Section */}
-            <section className="container mx-auto px-6 py-20">
-                <div className="text-center mb-16">
-                    <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                        Why Choose Heritage World?
-                    </h2>
-                    <p className="text-xl text-gray-600">
-                        Everything you need to explore cultural heritage
-                    </p>
+            <section className="py-20 md:py-32 bg-white">
+                <div className="container mx-auto px-6">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                            Why Choose Heritage World?
+                        </h2>
+                        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                            Everything you need to explore cultural heritage in one seamless platform
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                        {/* Feature 1 */}
+                        <div className="group bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 transform hover:-translate-y-2">
+                            <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                <i className="ri-museum-line text-4xl text-primary"></i>
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                                Discover Museums
+                            </h3>
+                            <p className="text-gray-600 leading-relaxed">
+                                Browse through hundreds of museums, exhibitions, and cultural events from around the world. Find your next adventure.
+                            </p>
+                        </div>
+
+                        {/* Feature 2 */}
+                        <div className="group bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 transform hover:-translate-y-2">
+                            <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                <i className="ri-calendar-check-line text-4xl text-primary"></i>
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                                Easy Booking
+                            </h3>
+                            <p className="text-gray-600 leading-relaxed">
+                                Book your tickets in seconds. Manage all your bookings in one convenient place with instant confirmations.
+                            </p>
+                        </div>
+
+                        {/* Feature 3 */}
+                        <div className="group bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 transform hover:-translate-y-2">
+                            <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                <i className="ri-star-line text-4xl text-primary"></i>
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                                Exclusive Events
+                            </h3>
+                            <p className="text-gray-600 leading-relaxed">
+                                Access special exhibitions, guided tours, and cultural events not available elsewhere. Be the first to know.
+                            </p>
+                        </div>
+                    </div>
                 </div>
+            </section>
 
-                <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                    {/* Feature 1 */}
-                    <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all border border-gray-100">
-                        <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-                            <i className="ri-museum-line text-3xl text-primary"></i>
+            {/* Additional Features Grid */}
+            <section className="py-20 md:py-32 bg-gradient-to-br from-gray-50 to-white">
+                <div className="container mx-auto px-6">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+                        <div className="text-center p-6 rounded-xl bg-white shadow-md hover:shadow-lg transition-all">
+                            <i className="ri-shield-check-line text-4xl text-primary mb-4"></i>
+                            <h4 className="font-bold text-gray-900 mb-2">Secure Booking</h4>
+                            <p className="text-sm text-gray-600">100% secure payment processing</p>
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                            Discover Museums
-                        </h3>
-                        <p className="text-gray-600 leading-relaxed">
-                            Browse through hundreds of museums, exhibitions, and cultural events from around the world.
+                        <div className="text-center p-6 rounded-xl bg-white shadow-md hover:shadow-lg transition-all">
+                            <i className="ri-time-line text-4xl text-primary mb-4"></i>
+                            <h4 className="font-bold text-gray-900 mb-2">24/7 Support</h4>
+                            <p className="text-sm text-gray-600">Always here to help you</p>
+                        </div>
+                        <div className="text-center p-6 rounded-xl bg-white shadow-md hover:shadow-lg transition-all">
+                            <i className="ri-refund-line text-4xl text-primary mb-4"></i>
+                            <h4 className="font-bold text-gray-900 mb-2">Easy Cancellation</h4>
+                            <p className="text-sm text-gray-600">Cancel anytime, no questions asked</p>
+                        </div>
+                        <div className="text-center p-6 rounded-xl bg-white shadow-md hover:shadow-lg transition-all">
+                            <i className="ri-global-line text-4xl text-primary mb-4"></i>
+                            <h4 className="font-bold text-gray-900 mb-2">Global Access</h4>
+                            <p className="text-sm text-gray-600">Museums from around the world</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Testimonials Section */}
+            <section className="py-20 md:py-32 bg-white">
+                <div className="container mx-auto px-6">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                            What Our Users Say
+                        </h2>
+                        <p className="text-xl text-gray-600">
+                            Join thousands of satisfied cultural enthusiasts
                         </p>
                     </div>
 
-                    {/* Feature 2 */}
-                    <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all border border-gray-100">
-                        <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-                            <i className="ri-calendar-check-line text-3xl text-primary"></i>
+                    <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                        <div className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <div className="flex items-center gap-1 mb-4 text-yellow-400">
+                                {[...Array(5)].map((_, i) => (
+                                    <i key={i} className="ri-star-fill"></i>
+                                ))}
+                            </div>
+                            <p className="text-gray-700 mb-6 leading-relaxed">
+                                "Heritage World has completely transformed how I explore museums. The booking process is seamless and I've discovered so many amazing exhibitions!"
+                            </p>
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
+                                    <i className="ri-user-line text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <div className="font-semibold text-gray-900">Sarah Johnson</div>
+                                    <div className="text-sm text-gray-600">Art Enthusiast</div>
+                                </div>
+                            </div>
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                            Easy Booking
-                        </h3>
-                        <p className="text-gray-600 leading-relaxed">
-                            Book your tickets in seconds. Manage all your bookings in one convenient place.
-                        </p>
-                    </div>
 
-                    {/* Feature 3 */}
-                    <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all border border-gray-100">
-                        <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-                            <i className="ri-star-line text-3xl text-primary"></i>
+                        <div className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <div className="flex items-center gap-1 mb-4 text-yellow-400">
+                                {[...Array(5)].map((_, i) => (
+                                    <i key={i} className="ri-star-fill"></i>
+                                ))}
+                            </div>
+                            <p className="text-gray-700 mb-6 leading-relaxed">
+                                "As a history teacher, I use Heritage World to plan educational trips. The variety of museums and easy booking system makes it perfect for group visits."
+                            </p>
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
+                                    <i className="ri-user-line text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <div className="font-semibold text-gray-900">Michael Chen</div>
+                                    <div className="text-sm text-gray-600">History Teacher</div>
+                                </div>
+                            </div>
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                            Exclusive Events
-                        </h3>
-                        <p className="text-gray-600 leading-relaxed">
-                            Access special exhibitions, guided tours, and cultural events not available elsewhere.
-                        </p>
+
+                        <div className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <div className="flex items-center gap-1 mb-4 text-yellow-400">
+                                {[...Array(5)].map((_, i) => (
+                                    <i key={i} className="ri-star-fill"></i>
+                                ))}
+                            </div>
+                            <p className="text-gray-700 mb-6 leading-relaxed">
+                                "The best platform for museum lovers! I've booked tickets to exclusive exhibitions I never would have found otherwise. Highly recommend!"
+                            </p>
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
+                                    <i className="ri-user-line text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <div className="font-semibold text-gray-900">Emily Rodriguez</div>
+                                    <div className="text-sm text-gray-600">Museum Curator</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
             {/* CTA Section */}
-            <section className="bg-primary text-white py-20">
-                <div className="container mx-auto px-6 text-center">
-                    <h2 className="text-4xl font-bold mb-6">
+            <section className="relative py-20 md:py-32 bg-gradient-to-br from-primary to-primary/90 text-white overflow-hidden">
+                {/* Background decoration */}
+                <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+                </div>
+                
+                <div className="container mx-auto px-6 text-center relative z-10">
+                    <h2 className="text-4xl md:text-5xl font-bold mb-6">
                         Ready to Start Your Journey?
                     </h2>
-                    <p className="text-xl mb-10 text-primary-100">
+                    <p className="text-xl md:text-2xl mb-10 text-white/90 max-w-2xl mx-auto">
                         Join thousands of cultural enthusiasts exploring heritage around the world
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        {isSignedIn ? (
-                            <Link
-                                href="/home"
-                                className="px-8 py-4 bg-white text-primary rounded-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl font-semibold text-lg"
-                            >
-                                View All Museums
-                            </Link>
-                        ) : (
-                            <>
-                                <Link
-                                    href="/sign-up"
-                                    className="px-8 py-4 bg-white text-primary rounded-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl font-semibold text-lg"
-                                >
-                                    Create Free Account
-                                </Link>
-                <Link
-                                    href="/sign-in"
-                                    className="px-8 py-4 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white hover:text-primary transition-all font-semibold text-lg"
-                >
-                                    Sign In
-                </Link>
-                            </>
-                        )}
+                        <Link
+                            href="/sign-up"
+                            className="px-8 py-4 bg-white text-primary rounded-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl font-semibold text-lg transform hover:scale-105 flex items-center justify-center gap-2"
+                        >
+                            <span>Create Free Account</span>
+                            <i className="ri-arrow-right-line"></i>
+                        </Link>
+                        <Link
+                            href="/sign-in"
+                            className="px-8 py-4 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white hover:text-primary transition-all font-semibold text-lg transform hover:scale-105"
+                        >
+                            Sign In
+                        </Link>
                     </div>
                 </div>
             </section>
 
             {/* Footer */}
-            <footer className="bg-gray-900 text-gray-400 py-12">
+            <footer className="bg-gray-900 text-gray-400 py-16">
                 <div className="container mx-auto px-6">
-                    <div className="grid md:grid-cols-4 gap-8">
+                    <div className="grid md:grid-cols-4 gap-8 mb-12">
                         <div>
-                            <h3 className="text-white text-xl font-bold mb-4">
+                            <h3 className="text-white text-2xl font-bold mb-4">
                                 <span className="text-primary">HERITAGE</span> WORLD
                             </h3>
-                            <p className="text-sm">
-                                Your gateway to cultural heritage and museum experiences.
+                            <p className="text-sm leading-relaxed mb-4">
+                                Your gateway to cultural heritage and museum experiences. Discover, explore, and connect with history.
                             </p>
+                            <div className="flex gap-4">
+                                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                                    <i className="ri-facebook-fill"></i>
+                                </a>
+                                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                                    <i className="ri-twitter-fill"></i>
+                                </a>
+                                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                                    <i className="ri-instagram-fill"></i>
+                                </a>
+                                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                                    <i className="ri-linkedin-fill"></i>
+                                </a>
+                            </div>
                         </div>
                         <div>
                             <h4 className="text-white font-semibold mb-4">Explore</h4>
-                            <ul className="space-y-2 text-sm">
-                                <li><Link href={isSignedIn ? "/home" : "/sign-up"} className="hover:text-primary transition-colors">Museums</Link></li>
-                                <li><Link href={isSignedIn ? "/home" : "/sign-up"} className="hover:text-primary transition-colors">Events</Link></li>
-                                <li><Link href={isSignedIn ? "/home" : "/sign-up"} className="hover:text-primary transition-colors">Exhibitions</Link></li>
+                            <ul className="space-y-3 text-sm">
+                                <li><Link href="/sign-up" className="hover:text-primary transition-colors flex items-center gap-2"><i className="ri-arrow-right-s-line"></i> Museums</Link></li>
+                                <li><Link href="/sign-up" className="hover:text-primary transition-colors flex items-center gap-2"><i className="ri-arrow-right-s-line"></i> Events</Link></li>
+                                <li><Link href="/sign-up" className="hover:text-primary transition-colors flex items-center gap-2"><i className="ri-arrow-right-s-line"></i> Exhibitions</Link></li>
+                                <li><Link href="/sign-up" className="hover:text-primary transition-colors flex items-center gap-2"><i className="ri-arrow-right-s-line"></i> Guided Tours</Link></li>
                             </ul>
                         </div>
                         <div>
                             <h4 className="text-white font-semibold mb-4">Account</h4>
-                            <ul className="space-y-2 text-sm">
-                                {isSignedIn ? (
-                                    <>
-                                        <li><Link href="/bookings" className="hover:text-primary transition-colors">My Bookings</Link></li>
-                                        <li><Link href="/home" className="hover:text-primary transition-colors">Home</Link></li>
-                                    </>
-                                ) : (
-                                    <>
-                                        <li><Link href="/sign-in" className="hover:text-primary transition-colors">Sign In</Link></li>
-                                        <li><Link href="/sign-up" className="hover:text-primary transition-colors">Sign Up</Link></li>
-                                    </>
-                                )}
+                            <ul className="space-y-3 text-sm">
+                                <li><Link href="/sign-in" className="hover:text-primary transition-colors flex items-center gap-2"><i className="ri-arrow-right-s-line"></i> Sign In</Link></li>
+                                <li><Link href="/sign-up" className="hover:text-primary transition-colors flex items-center gap-2"><i className="ri-arrow-right-s-line"></i> Sign Up</Link></li>
+                                <li><Link href="/sign-up" className="hover:text-primary transition-colors flex items-center gap-2"><i className="ri-arrow-right-s-line"></i> My Bookings</Link></li>
+                                <li><Link href="/sign-up" className="hover:text-primary transition-colors flex items-center gap-2"><i className="ri-arrow-right-s-line"></i> Profile</Link></li>
                             </ul>
                         </div>
                         <div>
                             <h4 className="text-white font-semibold mb-4">Contact</h4>
-                            <ul className="space-y-2 text-sm">
-                                <li>support@heritageworld.com</li>
-                                <li>+1 (555) 123-4567</li>
+                            <ul className="space-y-3 text-sm">
+                                <li className="flex items-center gap-2">
+                                    <i className="ri-mail-line text-primary"></i>
+                                    support@heritageworld.com
+                                </li>
+                                <li className="flex items-center gap-2">
+                                    <i className="ri-phone-line text-primary"></i>
+                                    +1 (555) 123-4567
+                                </li>
+                                <li className="flex items-center gap-2">
+                                    <i className="ri-map-pin-line text-primary"></i>
+                                    Global Service
+                                </li>
                             </ul>
-              </div>
-            </div>
-                    <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
+                        </div>
+                    </div>
+                    <div className="border-t border-gray-800 pt-8 text-center text-sm">
                         <p>&copy; 2024 Heritage World. All rights reserved.</p>
-          </div>
-      </div>
+                    </div>
+                </div>
             </footer>
-    </div>
-  );
+        </div>
+    );
 }
-
