@@ -30,8 +30,8 @@ async function BookingsPage() {
         }
         
         // Get unique event IDs and user IDs
-        const eventIds = [...new Set(bookings.map((b: any) => b.event).filter(Boolean))];
-        const userIds = [...new Set(bookings.map((b: any) => b.user).filter(Boolean))];
+        const eventIds = Array.from(new Set(bookings.map((b: any) => b.event).filter(Boolean)));
+        const userIds = Array.from(new Set(bookings.map((b: any) => b.user).filter(Boolean)));
         
         // OPTIMIZED: Batch fetch events and users instead of sequential loops
         const events: any[] = [];
