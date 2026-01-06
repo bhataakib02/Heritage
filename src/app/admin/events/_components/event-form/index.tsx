@@ -45,6 +45,23 @@ function EventForm({ initialData, type = "create" }: Props) {
           }));
         }
         
+        // Ensure required fields have default values if empty
+        if (!event.date || event.date.trim() === "") {
+          event.date = "Open Daily"; // Default for museums that are always open
+        }
+        if (!event.time || event.time.trim() === "") {
+          event.time = "9:00 AM - 6:00 PM"; // Default opening hours
+        }
+        if (!event.guests) {
+          event.guests = [];
+        }
+        if (!event.images) {
+          event.images = [];
+        }
+        if (!event.ticketTypes) {
+          event.ticketTypes = [];
+        }
+        
         await axios.post("/api/admin/events", event);
         toast.success("Museum created successfully");
         // Use hard redirect to force page reload and bypass cache
@@ -66,6 +83,23 @@ function EventForm({ initialData, type = "create" }: Props) {
             name: ticket.name === "Custom" && ticket.customName ? ticket.customName : ticket.name,
             customName: undefined, // Remove customName from final data
           }));
+        }
+        
+        // Ensure required fields have default values if empty
+        if (!event.date || event.date.trim() === "") {
+          event.date = "Open Daily";
+        }
+        if (!event.time || event.time.trim() === "") {
+          event.time = "9:00 AM - 6:00 PM";
+        }
+        if (!event.guests) {
+          event.guests = [];
+        }
+        if (!event.images) {
+          event.images = [];
+        }
+        if (!event.ticketTypes) {
+          event.ticketTypes = [];
         }
         
         await axios.put(`/api/admin/events/${eventId}`, event);
