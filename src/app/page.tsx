@@ -37,20 +37,31 @@ export default function LandingPage() {
             const timestamp = Date.now();
             const random = Math.random().toString(36).substring(7);
             const refresh = forceRefresh ? refreshKey + 1 : refreshKey;
+            const cacheBuster = `cb_${timestamp}_${random}_${Math.random().toString(36).substring(7)}`;
             
-            const response = await axios.get(`/api/events/public?t=${timestamp}&r=${random}&_=${Date.now()}&refresh=${refresh}`, {
+            // Build URL with multiple cache-busting params
+            const url = `/api/events/public?t=${timestamp}&r=${random}&_=${Date.now()}&refresh=${refresh}&cb=${cacheBuster}&v=${Date.now()}&nocache=${Math.random()}`;
+            
+            const response = await axios.get(url, {
                 headers: {
-                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
                     'Pragma': 'no-cache',
                     'Expires': '0',
+                    'X-Request-Time': timestamp.toString(),
+                    'X-No-Cache': 'true',
                 },
-                // Disable axios cache
+                // Disable axios cache completely
                 params: {
                     t: timestamp,
                     r: random,
                     _: Date.now(),
-                    refresh: refresh
-                }
+                    refresh: refresh,
+                    cb: cacheBuster,
+                    v: Date.now(),
+                    nocache: Math.random()
+                },
+                // Force fresh request
+                validateStatus: () => true, // Don't throw on any status
             });
             if (response.data.success) {
                 const fetchedEvents = response.data.events || [];

@@ -5,7 +5,7 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0, s-maxage=0"
+          "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0, s-maxage=0, private, no-transform"
         },
         {
           "key": "CDN-Cache-Control",
@@ -14,6 +14,22 @@
         {
           "key": "Vercel-CDN-Cache-Control",
           "value": "no-cache"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        },
+        {
+          "key": "X-Cache-Control",
+          "value": "no-cache"
+        },
+        {
+          "key": "Vary",
+          "value": "*"
         }
       ]
     }

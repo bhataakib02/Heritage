@@ -12,12 +12,26 @@ export default authMiddleware({
         '/sign-up',
         '/api/webhooks(.*)',
         '/api/current-user',
+        '/api/events/public',
     ],
     // Redirect unauthenticated users to landing page
     signInUrl: '/sign-in',
     // After auth check, redirect authenticated users from landing to home
     afterAuth(auth, req) {
         const { pathname } = req.nextUrl;
+        
+        // Add aggressive no-cache headers for the public events API
+        if (pathname === '/api/events/public') {
+            const response = NextResponse.next();
+            response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0, s-maxage=0, private');
+            response.headers.set('Pragma', 'no-cache');
+            response.headers.set('Expires', '0');
+            response.headers.set('CDN-Cache-Control', 'no-cache');
+            response.headers.set('Vercel-CDN-Cache-Control', 'no-cache');
+            response.headers.set('X-Cache-Control', 'no-cache');
+            response.headers.set('X-Request-Time', Date.now().toString());
+            return response;
+        }
         
         // If user is authenticated and trying to access landing page, redirect to home
         if (auth.userId && (pathname === '/' || pathname === '/landing')) {
