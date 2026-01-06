@@ -10,37 +10,8 @@ export default function LandingPage() {
     const router = useRouter();
     const [hasRedirected, setHasRedirected] = useState(false);
 
-    // Redirect authenticated users immediately - MUST be called before any early returns
-    useEffect(() => {
-        if (isLoaded && isSignedIn) {
-            // Immediate redirect using window.location for reliability
-            window.location.href = "/home";
-        }
-    }, [isLoaded, isSignedIn]);
-
-    // Wait for Clerk to load before checking auth status
-    if (!isLoaded) {
-        return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading...</p>
-                </div>
-            </div>
-        );
-    }
-
-    // If signed in, show redirect message (window.location will handle the redirect)
-    if (isSignedIn) {
-        return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-gray-600">Redirecting to dashboard...</p>
-                </div>
-            </div>
-        );
-    }
+    // Middleware handles redirect for authenticated users
+    // This component only renders for unauthenticated users
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
