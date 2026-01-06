@@ -1,10 +1,6 @@
-import { SignIn } from "@clerk/nextjs";
-import { Metadata } from "next";
+"use client";
 
-export const metadata: Metadata = {
-    title: "Sign In | Heritage World",
-    description: "Sign in to Heritage World to explore and book museum events and exhibitions.",
-};
+import { SignIn } from "@clerk/nextjs";
 
 export default function SignInPage() {
     return (

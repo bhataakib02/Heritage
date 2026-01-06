@@ -30,7 +30,9 @@ const fixNullUsernames = async () => {
                 } else if (user.clerkUserId) {
                     newUserName = `user_${user.clerkUserId.slice(0, 8)}`;
                 } else {
-                    newUserName = `user_${user._id.toString().slice(-8)}`;
+                    // Use id field (Supabase uses 'id', not '_id')
+                    const userId = (user as any).id || (user as any)._id;
+                    newUserName = `user_${String(userId).slice(-8)}`;
                 }
                 
                 // Ensure uniqueness with timestamp and random string
