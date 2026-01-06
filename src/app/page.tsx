@@ -51,14 +51,6 @@ export default function LandingPage() {
         fetchEvents();
     }, []);
 
-    // Handle scroll for sticky navbar
-    useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -140,19 +132,8 @@ export default function LandingPage() {
 
     return (
         <div className="min-h-screen bg-white">
-            {/* Sticky Navigation */}
-            <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-                scrolled ? 'bg-white shadow-md' : 'bg-white/95'
-            }`}>
-                <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-                    <div className="text-2xl md:text-3xl font-bold text-gray-900">
-                        <span className="text-primary">HERITAGE</span> WORLD
-                    </div>
-                </div>
-            </nav>
-
-            {/* Hero Section with Museum Images */}
-            <section className="relative pt-20 pb-12 md:pt-24 md:pb-16 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+            {/* Hero Section with Museum Images - Full Width at Top */}
+            <section className="relative pt-12 pb-12 md:pt-16 md:pb-16 bg-gradient-to-br from-blue-50 via-white to-purple-50 w-full">
                 <div className="container mx-auto px-6">
                     <div className="max-w-4xl mx-auto text-center mb-8">
                         <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
