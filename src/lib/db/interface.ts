@@ -9,7 +9,7 @@ export interface IDatabaseAdapter {
 }
 
 export interface IModel<T = any> {
-    find(filter?: any): Promise<T[]>;
+    find(filter?: any, options?: { sort?: any; limit?: number }): Promise<T[]>;
     findOne(filter: any): Promise<T | null>;
     findById(id: string): Promise<T | null>;
     create(data: Partial<T>): Promise<T>;
