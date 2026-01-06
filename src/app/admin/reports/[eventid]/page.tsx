@@ -28,7 +28,7 @@ async function EventReportPage({ params }: Props) {
     });
 
     // Fetch users for bookings
-    const userIds = [...new Set(eventBookings.map((b: any) => b.user).filter(Boolean))];
+    const userIds = Array.from(new Set(eventBookings.map((b: any) => b.user).filter(Boolean)));
     const UserModel = (await import("@/models/user-model")).default;
     const users = [];
     for (const userId of userIds) {

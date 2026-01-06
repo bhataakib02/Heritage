@@ -15,7 +15,7 @@ async function BookingsPage() {
   });
   
   // Populate events manually (Supabase doesn't have .populate())
-  const eventIds = [...new Set(bookings.map((b: any) => b.event).filter(Boolean))];
+  const eventIds = Array.from(new Set(bookings.map((b: any) => b.event).filter(Boolean)));
   const events = [];
   for (const eventId of eventIds) {
     const event = await EventModel.findById(eventId);

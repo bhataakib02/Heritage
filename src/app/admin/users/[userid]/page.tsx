@@ -38,7 +38,7 @@ async function UserDetailPage({ params }: Props) {
         const bookings = await BookingModel.find({ user: params.userid });
         
         // Fetch events for bookings
-        const eventIds = [...new Set(bookings.map((b: any) => b.event).filter(Boolean))];
+        const eventIds = Array.from(new Set(bookings.map((b: any) => b.event).filter(Boolean)));
         const events = [];
         for (const eventId of eventIds) {
             const event = await EventModel.findById(eventId);
