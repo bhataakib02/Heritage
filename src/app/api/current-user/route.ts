@@ -4,6 +4,9 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse, NextRequest } from "next/server";
 connectDB()
 
+// Force dynamic rendering - this route uses auth() which requires headers
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
     try {
         const { userId } = auth();

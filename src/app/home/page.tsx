@@ -13,6 +13,9 @@ import { redirect } from "next/navigation";
 // Don't call connectDB at module level - it can cause issues
 // connectDB();
 
+// Force dynamic rendering - this page uses auth() which requires headers
+export const dynamic = 'force-dynamic';
+
 interface Props {
   searchParams: {
     name: string;

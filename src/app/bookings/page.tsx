@@ -8,6 +8,10 @@ import dayjs from "dayjs";
 
 import React from "react";
 connectDB();
+
+// Force dynamic rendering - this page uses getUserIdOfLoggedInUser() which requires headers
+export const dynamic = 'force-dynamic';
+
 async function BookingsPage() {
   const userId = await getUserIdOfLoggedInUser();
   
