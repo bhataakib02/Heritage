@@ -37,10 +37,11 @@ async function BookEventPage({ params }: Props) {
   const eventBookings = await BookingModel.find({ event: params.eventid, status: 'booked' });
 
 
-  const getEventProperty = (property: string) => {
+  const getMuseumProperty = (property: string, label?: string) => {
+    const displayLabel = label || property;
     return (
       <div className="flex flex-col text-sm">
-        <h1 className="font-semibold capitalize">{property}</h1>
+        <h1 className="font-semibold capitalize">{displayLabel}</h1>
         <h1 className="text-gray-600">{event[property as keyof EventType]}</h1>
       </div>
     );
@@ -87,13 +88,13 @@ async function BookEventPage({ params }: Props) {
         <p className="text-gray-500 w-full text-sm mt-7">{event.description}</p>
 
         <div className="mt-7 bg-gray-100 border border-gray-200 p-3 rounded-sm grid grid-cols-1 md:grid-cols-3 gap-5">
-          {getEventProperty("organizer")}
-          {getEventProperty("location")}
-          {getEventProperty("date")}
-          {getEventProperty("time")}
+          {getMuseumProperty("organizer", "Director / Curator")}
+          {getMuseumProperty("location", "Museum Address")}
+          {getMuseumProperty("date", "Opening Hours / Status")}
+          {getMuseumProperty("time", "Visiting Hours")}
 
           <div className="flex flex-col text-sm">
-            <h1 className="font-semibold capitalize">Chief Guests</h1>
+            <h1 className="font-semibold capitalize">Featured Exhibitions</h1>
             <h1 className="text-gray-600">
               {event.guests && event.guests.length > 0 
                 ? (Array.isArray(event.guests) ? event.guests.join(", ") : String(event.guests))

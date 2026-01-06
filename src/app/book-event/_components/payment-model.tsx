@@ -63,7 +63,7 @@ function PaymentModal({
                 };
 
                 await axios.post("/api/bookings", reqBody);
-                toast.success("Visiting Slot booked successfully");
+                toast.success("Museum visit booked successfully");
                 router.push("/bookings");
             }
         } catch (error: any) {
