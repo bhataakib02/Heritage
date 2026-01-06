@@ -131,24 +131,37 @@ export default function LandingPage() {
     ];
 
     return (
-        <div className="min-h-screen bg-white">
-            {/* Top Header with HERITAGE WORLD Logo */}
-            <header className="w-full bg-gradient-to-r from-primary via-blue-600 to-purple-600 py-6 md:py-8 shadow-lg">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+            {/* Top Navigation Header - Museum Style */}
+            <header className="w-full bg-white border-b-2 border-gray-200 shadow-sm py-4 md:py-5">
                 <div className="container mx-auto px-6">
-                    <div className="text-center">
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg mb-2">
-                            <span className="text-yellow-300">HERITAGE</span>{" "}
-                            <span className="text-white">WORLD</span>
-                        </h1>
-                        <p className="text-white/90 text-sm md:text-base font-medium">
-                            Explore Cultural Heritage & Museum Experiences
-                        </p>
-                    </div>
+                    <nav className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold">
+                                <span className="text-amber-600">HERITAGE</span>{" "}
+                                <span className="text-gray-800">WORLD</span>
+                            </h1>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <Link
+                                href="/sign-in"
+                                className="px-4 py-2 text-gray-700 hover:text-primary transition-colors font-medium text-sm md:text-base"
+                            >
+                                Sign In
+                            </Link>
+                            <Link
+                                href="/sign-up"
+                                className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-all font-medium text-sm md:text-base"
+                            >
+                                Sign Up
+                            </Link>
+                        </div>
+                    </nav>
                 </div>
             </header>
 
             {/* Hero Section with Museum Images - Full Width */}
-            <section className="relative pt-12 pb-12 md:pt-16 md:pb-16 bg-gradient-to-br from-blue-50 via-white to-purple-50 w-full">
+            <section className="relative pt-8 pb-12 md:pt-12 md:pb-16 bg-gradient-to-br from-gray-50 via-white to-gray-50 w-full">
                 <div className="container mx-auto px-6">
                     <div className="max-w-4xl mx-auto text-center mb-8">
                         <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
@@ -300,7 +313,7 @@ export default function LandingPage() {
             </section>
 
             {/* Trust Indicators */}
-            <section className="py-8 bg-gray-50 border-y border-gray-200">
+            <section className="py-8 bg-gradient-to-br from-gray-50 via-white to-gray-50 border-y border-gray-200">
                 <div className="container mx-auto px-6">
                     <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 text-sm text-gray-600">
                         <div className="flex items-center gap-2">
