@@ -293,39 +293,6 @@ export default function LandingPage() {
                 </div>
             </section>
 
-            {/* CTA Section */}
-            <section className="relative py-20 md:py-32 bg-gradient-to-br from-primary to-primary/90 text-white overflow-hidden">
-                {/* Background decoration */}
-                <div className="absolute inset-0 overflow-hidden">
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
-                    <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
-                </div>
-                
-                <div className="container mx-auto px-6 text-center relative z-10">
-                    <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                        Ready to Start Your Journey?
-                    </h2>
-                    <p className="text-xl md:text-2xl mb-10 text-white/90 max-w-2xl mx-auto">
-                        Join thousands of cultural enthusiasts exploring heritage around the world
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link
-                            href="/sign-up"
-                            className="px-8 py-4 bg-white text-primary rounded-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl font-semibold text-lg transform hover:scale-105 flex items-center justify-center gap-2"
-                        >
-                            <span>Create Free Account</span>
-                            <i className="ri-arrow-right-line"></i>
-                        </Link>
-                        <Link
-                            href="/sign-in"
-                            className="px-8 py-4 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white hover:text-primary transition-all font-semibold text-lg transform hover:scale-105"
-                        >
-                            Sign In
-                        </Link>
-                    </div>
-                </div>
-            </section>
-
             {/* Footer */}
             <footer className="bg-gray-900 text-gray-400 py-16">
                 <div className="container mx-auto px-6">
@@ -390,6 +357,7 @@ export default function LandingPage() {
                     </div>
                     <div className="border-t border-gray-800 pt-8 text-center text-sm">
                         <p>&copy; 2024 Heritage World. All rights reserved.</p>
+                        <p className="mt-2">Developed by Bhat Aakib</p>
                     </div>
                 </div>
             </footer>
