@@ -99,6 +99,10 @@ export default function LandingPage() {
         setSearchName(museumName);
         setShowDropdown(false);
         setSearchFocused(false);
+        // Scroll to museums section after selection
+        setTimeout(() => {
+            document.getElementById('museums-section')?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
     };
 
     // Wait for Clerk to load
@@ -139,20 +143,6 @@ export default function LandingPage() {
                 <div className="container mx-auto px-6 py-4 flex justify-between items-center">
                     <div className="text-2xl md:text-3xl font-bold text-gray-900">
                         <span className="text-primary">HERITAGE</span> WORLD
-                    </div>
-                    <div className="flex gap-4 items-center">
-                        <Link
-                            href="/sign-in"
-                            className="px-4 md:px-6 py-2 text-gray-700 hover:text-primary transition-colors font-medium"
-                        >
-                            Sign In
-                        </Link>
-                        <Link
-                            href="/sign-up"
-                            className="px-4 md:px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all shadow-md hover:shadow-lg font-medium"
-                        >
-                            Sign Up
-                        </Link>
                     </div>
                 </div>
             </nav>
@@ -329,14 +319,16 @@ export default function LandingPage() {
             </section>
 
             {/* Museums Section */}
-            <section className="py-16 md:py-24 bg-white">
+            <section id="museums-section" className="py-16 md:py-24 bg-white">
                 <div className="container mx-auto px-6">
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                            Explore Our Museums
+                            {searchName ? `Selected Museum: ${searchName}` : "Explore Our Museums"}
                         </h2>
                         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                            Discover amazing cultural heritage experiences
+                            {searchName 
+                                ? "Book your tickets for this museum" 
+                                : "Select a museum from the search above to view details"}
                         </p>
                     </div>
 
@@ -357,92 +349,71 @@ export default function LandingPage() {
                                 Sign Up to Add Museums
                             </Link>
                         </div>
-                    ) : filteredEvents.length === 0 && (searchName || searchDate) ? (
-                        <div className="text-center py-12">
-                            <p className="text-gray-600 text-lg mb-4">
-                                No museums found matching your search. Showing all museums instead.
-                            </p>
-                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mt-8">
-                                {events.slice(0, 6).map((event) => (
-                                    <div
-                                        key={event.id || event._id}
-                                        className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all border border-gray-100 overflow-hidden"
-                                    >
-                                        <div className="h-48 bg-gray-200 overflow-hidden">
-                                            <img
-                                                src={event.images?.[0] || '/placeholder-image.jpg'}
-                                                alt={event.name}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
-                                        <div className="p-6">
-                                            <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">
-                                                {event.name}
-                                            </h3>
-                                            <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                                                {event.description}
-                                            </p>
-                                            <div className="space-y-2 mb-4 text-sm text-gray-600">
-                                                <div className="flex items-center gap-2">
-                                                    <i className="ri-map-pin-line text-primary"></i>
-                                                    <span>{event.location}</span>
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    <i className="ri-calendar-line text-primary"></i>
-                                                    <span>{event.date} at {event.time}</span>
-                                                </div>
-                                            </div>
-                                            <Link
-                                                href={`/book-event/${event.id || event._id}`}
-                                                className="block w-full text-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all font-semibold"
-                                            >
-                                                Book Tickets
-                                            </Link>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                    ) : searchName && filteredEvents.length > 0 ? (
+                        // Show only selected museum
+                        <div className="max-w-4xl mx-auto">
                             {filteredEvents.map((event) => (
                                 <div
                                     key={event.id || event._id}
                                     className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all border border-gray-100 overflow-hidden"
                                 >
-                                    <div className="h-48 bg-gray-200 overflow-hidden">
+                                    <div className="h-64 md:h-80 bg-gray-200 overflow-hidden">
                                         <img
                                             src={event.images?.[0] || '/placeholder-image.jpg'}
                                             alt={event.name}
                                             className="w-full h-full object-cover"
                                         />
                                     </div>
-                                    <div className="p-6">
-                                        <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">
+                                    <div className="p-8">
+                                        <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                                             {event.name}
                                         </h3>
-                                        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                                        <p className="text-gray-600 mb-6 leading-relaxed">
                                             {event.description}
                                         </p>
-                                        <div className="space-y-2 mb-4 text-sm text-gray-600">
-                                            <div className="flex items-center gap-2">
-                                                <i className="ri-map-pin-line text-primary"></i>
-                                                <span>{event.location}</span>
+                                        <div className="space-y-3 mb-6 text-gray-700">
+                                            <div className="flex items-center gap-2 text-lg">
+                                                <i className="ri-map-pin-line text-primary text-xl"></i>
+                                                <span className="font-semibold">{event.location}</span>
                                             </div>
-                                            <div className="flex items-center gap-2">
-                                                <i className="ri-calendar-line text-primary"></i>
-                                                <span>{event.date} at {event.time}</span>
+                                            <div className="flex items-center gap-2 text-lg">
+                                                <i className="ri-calendar-line text-primary text-xl"></i>
+                                                <span className="font-semibold">{event.date} at {event.time}</span>
                                             </div>
                                         </div>
                                         <Link
-                                            href={`/book-event/${event.id || event._id}`}
-                                            className="block w-full text-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all font-semibold"
+                                            href="/sign-up"
+                                            className="block w-full text-center px-6 py-4 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all font-semibold text-lg shadow-lg hover:shadow-xl"
                                         >
-                                            Book Tickets
+                                            Create Account to Book Tickets
                                         </Link>
+                                        <p className="text-center text-sm text-gray-500 mt-4">
+                                            Already have an account? <Link href="/sign-in" className="text-primary hover:underline">Sign In</Link>
+                                        </p>
                                     </div>
                                 </div>
                             ))}
+                        </div>
+                    ) : searchName && filteredEvents.length === 0 ? (
+                        <div className="text-center py-12">
+                            <p className="text-gray-600 text-lg mb-4">
+                                No museum found matching "{searchName}". Please try another search.
+                            </p>
+                            <button
+                                onClick={() => {
+                                    setSearchName("");
+                                    setSearchDate("");
+                                }}
+                                className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all font-semibold"
+                            >
+                                Clear Search
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="text-center py-12">
+                            <p className="text-gray-600 text-lg mb-4">
+                                Please select a museum from the search bar above to view details and book tickets.
+                            </p>
                         </div>
                     )}
                 </div>
