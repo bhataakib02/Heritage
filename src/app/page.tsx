@@ -405,12 +405,13 @@ export default function LandingPage() {
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                                         <i className="ri-calendar-line mr-2"></i>
-                                        Event Date
+                                        Visit Date
                                     </label>
                                     <input
                                         type="date"
                                         value={searchDate}
                                         onChange={(e) => setSearchDate(e.target.value)}
+                                        placeholder="Select visit date"
                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                                     />
                                 </div>
