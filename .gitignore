@@ -37,6 +37,8 @@ lerna-debug.log*
 # sensitive files
 *.txt
 !README.txt
+!vercel-env-variables.txt
+vercel-env-import.txt
 superbase.txt
 *credentials*
 *secrets*
