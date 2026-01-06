@@ -62,7 +62,7 @@ export async function GET(request: Request) {
         // Return with aggressive no-cache headers to prevent ALL caching
         const response = NextResponse.json(responseData, {
             headers: {
-                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0, s-maxage=0, private, no-transform',
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0, s-maxage=0, private, no-transform, immutable',
                 'Pragma': 'no-cache',
                 'Expires': '0',
                 'X-Cache-Control': 'no-cache',
@@ -72,13 +72,18 @@ export async function GET(request: Request) {
                 'X-Request-ID': randomId,
                 'X-Response-Time': timestamp.toString(),
                 'X-Fetched-At': requestTime,
+                'X-Database-Info': dbInfo,
+                'X-Event-Count': (events?.length || 0).toString(),
                 'Vary': '*', // Tell CDN to vary on everything
+                'Surrogate-Control': 'no-store', // For CDN/proxy
             }
         });
         
         // Additional header manipulation to ensure no caching
         response.headers.delete('ETag');
         response.headers.delete('Last-Modified');
+        response.headers.delete('If-None-Match');
+        response.headers.delete('If-Modified-Since');
         
         return response;
     } catch (error: any) {

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import axios from "axios";
 
 interface Event {
     id?: string;
@@ -29,7 +28,7 @@ export default function LandingPage() {
     const [searchFocused, setSearchFocused] = useState(false);
     const [refreshKey, setRefreshKey] = useState(0);
 
-    // Fetch events from database - with aggressive cache busting
+    // Fetch events from database - with ULTRA aggressive cache busting
     const fetchEvents = async (forceRefresh = false) => {
         try {
             setLoading(true);
@@ -38,49 +37,52 @@ export default function LandingPage() {
             const random = Math.random().toString(36).substring(7);
             const refresh = forceRefresh ? refreshKey + 1 : refreshKey;
             const cacheBuster = `cb_${timestamp}_${random}_${Math.random().toString(36).substring(7)}`;
+            const version = `v${Date.now()}_${Math.random().toString(36).substring(7)}`;
             
             // Build URL with multiple cache-busting params
-            const url = `/api/events/public?t=${timestamp}&r=${random}&_=${Date.now()}&refresh=${refresh}&cb=${cacheBuster}&v=${Date.now()}&nocache=${Math.random()}`;
+            const url = `/api/events/public?t=${timestamp}&r=${random}&_=${Date.now()}&refresh=${refresh}&cb=${cacheBuster}&v=${version}&nocache=${Math.random()}&force=${Date.now()}`;
             
-            const response = await axios.get(url, {
+            // Use native fetch with cache: 'no-store' instead of axios for better cache control
+            const response = await fetch(url, {
+                method: 'GET',
+                cache: 'no-store', // Critical: Force no caching
                 headers: {
                     'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
                     'Pragma': 'no-cache',
                     'Expires': '0',
                     'X-Request-Time': timestamp.toString(),
                     'X-No-Cache': 'true',
+                    'X-Force-Refresh': forceRefresh ? 'true' : 'false',
+                    'X-Version': version,
                 },
-                // Disable axios cache completely
-                params: {
-                    t: timestamp,
-                    r: random,
-                    _: Date.now(),
-                    refresh: refresh,
-                    cb: cacheBuster,
-                    v: Date.now(),
-                    nocache: Math.random()
-                },
-                // Force fresh request
-                validateStatus: () => true, // Don't throw on any status
             });
-            if (response.data.success) {
-                const fetchedEvents = response.data.events || [];
+            
+            // Parse response
+            const data = await response.json();
+            if (data.success) {
+                const fetchedEvents = data.events || [];
                 // ALWAYS update state - even if empty array
                 setEvents(fetchedEvents);
                 console.log("✅ Fetched events:", fetchedEvents.length, "at", new Date().toISOString());
                 console.log("📊 API Response:", {
-                    success: response.data.success,
+                    success: data.success,
                     eventCount: fetchedEvents.length,
-                    timestamp: response.data.timestamp,
-                    requestId: response.data.requestId,
-                    dbInfo: response.data._dbInfo,
-                    fetchedAt: response.data.fetchedAt
+                    timestamp: data.timestamp,
+                    requestId: data.requestId,
+                    dbInfo: data._dbInfo,
+                    fetchedAt: data.fetchedAt
                 });
                 if (fetchedEvents.length > 0) {
                     console.warn("⚠️ WARNING: Database contains", fetchedEvents.length, "event(s)!");
                     console.warn("⚠️ Event names:", fetchedEvents.map((e: Event) => e.name));
-                    console.warn("⚠️ Database:", response.data._dbInfo);
-                    console.warn("⚠️ To fix: Delete events from Supabase dashboard or admin panel");
+                    console.warn("⚠️ Database:", data._dbInfo);
+                    console.warn("⚠️ Response headers:", {
+                        'cache-control': response.headers.get('cache-control'),
+                        'x-request-id': response.headers.get('x-request-id'),
+                    });
+                    console.warn("⚠️ This might be cached data - try hard refresh (Ctrl+Shift+R)");
+                } else {
+                    console.log("✅ Database is empty - no events found");
                 }
                 
                 // If no events and searchName is set, clear it
@@ -111,13 +113,31 @@ export default function LandingPage() {
         }
     };
 
-    // Manual refresh function
+    // Manual refresh function - with cache clearing
     const handleRefresh = () => {
+        // Clear browser cache
+        if ('caches' in window) {
+            caches.keys().then(names => {
+                names.forEach(name => {
+                    caches.delete(name);
+                });
+                console.log("🗑️ Cleared browser cache");
+            });
+        }
         setRefreshKey(prev => prev + 1);
         fetchEvents(true);
     };
 
     useEffect(() => {
+        // Clear any cached data before fetching
+        if ('caches' in window) {
+            caches.keys().then(names => {
+                names.forEach(name => {
+                    caches.delete(name);
+                });
+            });
+        }
+        
         // Fetch immediately on mount
         fetchEvents(false);
     }, []);
