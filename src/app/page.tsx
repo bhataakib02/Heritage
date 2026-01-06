@@ -455,32 +455,6 @@ export default function LandingPage() {
                 </div>
             </section>
 
-            {/* CTA Section */}
-            <section className="py-16 md:py-24 bg-gradient-to-br from-gray-50 via-white to-gray-50">
-                <div className="container mx-auto px-6 text-center">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                        Ready to Explore?
-                    </h2>
-                    <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-                        Join thousands of cultural enthusiasts discovering heritage around the world
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link
-                            href="/sign-in"
-                            className="px-8 py-4 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl font-semibold text-lg"
-                        >
-                            Sign In to Book Tickets
-                        </Link>
-                        <Link
-                            href="/sign-up"
-                            className="px-8 py-4 bg-white text-primary border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all font-semibold text-lg"
-                        >
-                            Create Free Account
-                        </Link>
-                    </div>
-                </div>
-            </section>
-
             {/* Footer */}
             <footer className="bg-gray-900 text-gray-400 py-6">
                 <div className="container mx-auto px-6">
