@@ -264,11 +264,12 @@ export default function LandingPage() {
                         <button
                             onClick={handleRefresh}
                             disabled={loading}
-                            className="absolute right-0 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                            className="absolute right-0 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-all text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-md"
                             title="Refresh museums list"
+                            style={{ zIndex: 10 }}
                         >
                             <i className={`ri-refresh-line ${loading ? 'animate-spin' : ''}`}></i>
-                            {loading ? 'Loading...' : 'Refresh'}
+                            <span>{loading ? 'Loading...' : 'Refresh'}</span>
                         </button>
                     </nav>
                 </div>
