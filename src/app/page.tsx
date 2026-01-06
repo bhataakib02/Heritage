@@ -21,6 +21,25 @@ export default function LandingPage() {
         );
     }
 
+    // If user is already signed in, redirect to home page
+    useEffect(() => {
+        if (isLoaded && isSignedIn) {
+            router.push("/home");
+        }
+    }, [isLoaded, isSignedIn, router]);
+
+    // Show loading while redirecting authenticated users
+    if (isSignedIn) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-gray-600">Redirecting...</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
             {/* Navigation */}

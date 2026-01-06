@@ -25,7 +25,7 @@ let bookingModelInstance: IModel<Booking> | null = null;
 
 function getBookingModel(): IModel<Booking> {
     if (!bookingModelInstance) {
-        const supabase = getSupabaseClient();
+const supabase = getSupabaseClient();
         bookingModelInstance = new SupabaseModelAdapter<Booking>(supabase, 'bookings', 'id');
     }
     return bookingModelInstance;

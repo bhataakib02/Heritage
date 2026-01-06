@@ -23,7 +23,7 @@ let userModelInstance: IModel<User> | null = null;
 
 function getUserModel(): IModel<User> {
     if (!userModelInstance) {
-        const supabase = getSupabaseClient();
+const supabase = getSupabaseClient();
         userModelInstance = new SupabaseModelAdapter<User>(supabase, 'users', 'id');
     }
     return userModelInstance;
