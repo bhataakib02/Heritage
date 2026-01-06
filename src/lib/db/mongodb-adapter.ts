@@ -65,15 +65,15 @@ export class MongooseModelAdapter<T = any> implements IModel<T> {
     }
 
     async findByIdAndUpdate(id: string, data: Partial<T>, options?: any): Promise<T | null> {
-        return await this.model.findByIdAndUpdate(id, data, { ...options, new: true });
+        return await this.model.findByIdAndUpdate(id, data, { ...options, new: true }) as T | null;
     }
 
     async findByIdAndDelete(id: string): Promise<T | null> {
-        return await this.model.findByIdAndDelete(id);
+        return await this.model.findByIdAndDelete(id) as T | null;
     }
 
     async findOneAndUpdate(filter: any, data: Partial<T>, options?: any): Promise<T | null> {
-        return await this.model.findOneAndUpdate(filter, data, { ...options, new: true });
+        return await this.model.findOneAndUpdate(filter, data, { ...options, new: true }) as T | null;
     }
 
     async save(instance: any): Promise<T> {

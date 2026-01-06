@@ -51,7 +51,7 @@ export async function DELETE(
 
         // Prevent deleting yourself
         const currentUser = await UserModel.findOne({ clerkUserId: userId });
-        if (currentUser && (currentUser.id === params.userid || currentUser._id === params.userid)) {
+        if (currentUser && (currentUser.id === params.userid || (currentUser as any)._id === params.userid)) {
             return NextResponse.json(
                 { message: "You cannot delete your own account" },
                 { status: 400 }

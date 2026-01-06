@@ -71,8 +71,10 @@ function EventsTable({ events }: { events: EventType[] }) {
                     )}
                 </TableHeader>
                 <TableBody>
-                    {events.map((event) => {
-                        const eventId = event.id || event._id;
+                    {events
+                        .filter((event) => event.id || event._id)
+                        .map((event) => {
+                        const eventId = String(event.id || event._id || '');
                         return (
                             <TableRow key={eventId}>
                                 <TableCell>{event.name}</TableCell>

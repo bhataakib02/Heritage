@@ -44,7 +44,11 @@ function EventForm({ initialData, type = "create" }: Props) {
           newlySelectedImages.map((image: any) => image.file)
         );
         event.images = [...alreadyUploadedImages, ...newlyUploadedImageUrls];
-        const eventId = event.id || event._id;
+        const eventId = String(event.id || event._id || '');
+        if (!eventId) {
+          toast.error("Event ID is required for updating");
+          return;
+        }
         await axios.put(`/api/admin/events/${eventId}`, event);
         toast.success("Event updated successfully");
       }
