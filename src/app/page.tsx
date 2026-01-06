@@ -131,8 +131,21 @@ export default function LandingPage() {
         );
     }
 
-    // Get featured museums (first 3 with images)
-    const featuredMuseums = events.filter(e => e.images && e.images.length > 0).slice(0, 3);
+    // Get featured museums (first 3 with images) - always show 3
+    const featuredMuseums = events
+        .filter(e => e.images && e.images.length > 0)
+        .slice(0, 3);
+    
+    // If we have less than 3, pad with placeholders
+    const displayMuseums = [...featuredMuseums];
+    while (displayMuseums.length < 3 && displayMuseums.length < events.length) {
+        const remaining = events.filter(e => !displayMuseums.includes(e));
+        if (remaining.length > 0) {
+            displayMuseums.push(remaining[0]);
+        } else {
+            break;
+        }
+    }
 
     return (
         <div className="min-h-screen bg-white">
@@ -173,33 +186,43 @@ export default function LandingPage() {
                         </div>
                     </div>
 
-                    {/* Featured Museum Images */}
-                    {featuredMuseums.length > 0 && (
-                        <div className="max-w-6xl mx-auto mt-12">
-                            <div className="grid md:grid-cols-3 gap-4">
-                                {featuredMuseums.map((museum, index) => (
+                    {/* Featured Museum Images - Always show 3 images only */}
+                    <div className="max-w-6xl mx-auto mt-12">
+                        <div className="grid md:grid-cols-3 gap-4">
+                            {displayMuseums.length > 0 ? (
+                                displayMuseums.slice(0, 3).map((museum, index) => (
                                     <div
-                                        key={museum.id || museum._id}
+                                        key={museum.id || museum._id || index}
                                         className="relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105"
                                     >
                                         <div className="aspect-video bg-gray-200 overflow-hidden">
                                             <img
                                                 src={museum.images?.[0] || '/placeholder-image.jpg'}
-                                                alt={museum.name}
+                                                alt={museum.name || 'Museum'}
                                                 className="w-full h-full object-cover"
                                             />
                                         </div>
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end">
-                                            <div className="p-4 text-white w-full">
-                                                <h3 className="font-bold text-lg mb-1">{museum.name}</h3>
-                                                <p className="text-sm text-white/90">{museum.location}</p>
-                                            </div>
+                                    </div>
+                                ))
+                            ) : (
+                                // Show placeholder images if no museums
+                                [...Array(3)].map((_, index) => (
+                                    <div
+                                        key={index}
+                                        className="relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105"
+                                    >
+                                        <div className="aspect-video bg-gray-200 overflow-hidden">
+                                            <img
+                                                src="/placeholder-image.jpg"
+                                                alt="Museum"
+                                                className="w-full h-full object-cover"
+                                            />
                                         </div>
                                     </div>
-                                ))}
-                            </div>
+                                ))
+                            )}
                         </div>
-                    )}
+                    </div>
 
                     {/* Search Form */}
                     <div className="max-w-5xl mx-auto mt-8">
