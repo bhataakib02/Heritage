@@ -191,7 +191,7 @@ async function AdminDashboard() {
                         <h3 className="text-lg font-semibold mb-4">Top Events by Revenue</h3>
                         <div className="space-y-3">
                             {topEvents.map((item, index) => (
-                                <div key={item.event?.id || item.event?._id} className="flex justify-between items-center p-3 bg-gray-50 rounded-sm">
+                                <div key={item.event?.id || (item.event as any)?._id} className="flex justify-between items-center p-3 bg-gray-50 rounded-sm">
                                     <div className="flex items-center gap-3">
                                         <span className="text-gray-400 font-bold">#{index + 1}</span>
                                         <span className="font-medium">{(item.event as any)?.name}</span>
