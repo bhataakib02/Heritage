@@ -7,6 +7,8 @@ import { connectDB } from "@/config/dbConfig";
 import { EventType } from "@/interfaces/events";
 import EventModel from "@/models/event-model";
 import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 connectDB();
 
@@ -18,6 +20,14 @@ interface Props {
 }
 
 export default async function Home({ searchParams }: Props) {
+  // Check if user is authenticated
+  const { userId } = await auth();
+  
+  // If not authenticated, redirect to landing page
+  if (!userId) {
+    redirect("/landing");
+  }
+
   try {
     await handleNewUserRegistration();
   } catch (error) {
