@@ -54,15 +54,39 @@ export default function LandingPage() {
             });
             if (response.data.success) {
                 const fetchedEvents = response.data.events || [];
+                // ALWAYS update state - even if empty array
                 setEvents(fetchedEvents);
-                console.log("Fetched events:", fetchedEvents.length, "at", new Date().toISOString());
+                console.log("✅ Fetched events:", fetchedEvents.length, "at", new Date().toISOString());
+                console.log("📊 API Response:", {
+                    success: response.data.success,
+                    eventCount: fetchedEvents.length,
+                    timestamp: response.data.timestamp,
+                    requestId: response.data.requestId
+                });
+                
+                // If no events and searchName is set, clear it
+                if (fetchedEvents.length === 0 && searchName) {
+                    setSearchName("");
+                    setShowDropdown(false);
+                }
             } else {
-                console.error("API returned success: false");
+                console.error("❌ API returned success: false");
                 setEvents([]);
+                // Clear search if API fails
+                if (searchName) {
+                    setSearchName("");
+                    setShowDropdown(false);
+                }
             }
         } catch (error) {
-            console.error("Error fetching events:", error);
+            console.error("❌ Error fetching events:", error);
+            // Always set to empty array on error
             setEvents([]);
+            // Clear search on error
+            if (searchName) {
+                setSearchName("");
+                setShowDropdown(false);
+            }
         } finally {
             setLoading(false);
         }
@@ -99,6 +123,15 @@ export default function LandingPage() {
             window.removeEventListener('focus', handleFocus);
         };
     }, []);
+
+    // Clear search if events become empty
+    useEffect(() => {
+        if (events.length === 0 && searchName) {
+            console.log("🔄 Clearing search - no events in database");
+            setSearchName("");
+            setShowDropdown(false);
+        }
+    }, [events, searchName]);
 
 
     const handleSearch = (e: React.FormEvent) => {
