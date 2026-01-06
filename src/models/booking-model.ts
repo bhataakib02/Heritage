@@ -20,8 +20,21 @@ export interface Booking {
     updated_at?: string;
 }
 
-// Create Supabase model adapter
-const supabase = getSupabaseClient();
-const BookingModel: IModel<Booking> = new SupabaseModelAdapter<Booking>(supabase, 'bookings', 'id');
+// Lazy initialization - only create client when model is used
+let bookingModelInstance: IModel<Booking> | null = null;
+
+function getBookingModel(): IModel<Booking> {
+    if (!bookingModelInstance) {
+        const supabase = getSupabaseClient();
+        bookingModelInstance = new SupabaseModelAdapter<Booking>(supabase, 'bookings', 'id');
+    }
+    return bookingModelInstance;
+}
+
+const BookingModel = new Proxy({} as IModel<Booking>, {
+    get(target, prop) {
+        return getBookingModel()[prop as keyof IModel<Booking>];
+    }
+});
 
 export default BookingModel;

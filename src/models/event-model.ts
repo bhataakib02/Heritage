@@ -23,8 +23,21 @@ export interface Event {
     updated_at?: string;
 }
 
-// Create Supabase model adapter
-const supabase = getSupabaseClient();
-const EventModel: IModel<Event> = new SupabaseModelAdapter<Event>(supabase, 'events', 'id');
+// Lazy initialization - only create client when model is used
+let eventModelInstance: IModel<Event> | null = null;
+
+function getEventModel(): IModel<Event> {
+    if (!eventModelInstance) {
+        const supabase = getSupabaseClient();
+        eventModelInstance = new SupabaseModelAdapter<Event>(supabase, 'events', 'id');
+    }
+    return eventModelInstance;
+}
+
+const EventModel = new Proxy({} as IModel<Event>, {
+    get(target, prop) {
+        return getEventModel()[prop as keyof IModel<Event>];
+    }
+});
 
 export default EventModel;

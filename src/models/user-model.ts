@@ -18,8 +18,21 @@ export interface User {
     updated_at?: string;
 }
 
-// Create Supabase model adapter
-const supabase = getSupabaseClient();
-const UserModel: IModel<User> = new SupabaseModelAdapter<User>(supabase, 'users', 'id');
+// Lazy initialization - only create client when model is used
+let userModelInstance: IModel<User> | null = null;
+
+function getUserModel(): IModel<User> {
+    if (!userModelInstance) {
+        const supabase = getSupabaseClient();
+        userModelInstance = new SupabaseModelAdapter<User>(supabase, 'users', 'id');
+    }
+    return userModelInstance;
+}
+
+const UserModel = new Proxy({} as IModel<User>, {
+    get(target, prop) {
+        return getUserModel()[prop as keyof IModel<User>];
+    }
+});
 
 export default UserModel;
