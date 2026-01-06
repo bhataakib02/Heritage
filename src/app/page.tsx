@@ -3,13 +3,12 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
-import { useEffect } from "react";
-import React from "react";
+import { useEffect, useState } from "react";
 
 export default function LandingPage() {
     const { isSignedIn, isLoaded } = useUser();
     const router = useRouter();
-    const [hasRedirected, setHasRedirected] = React.useState(false);
+    const [hasRedirected, setHasRedirected] = useState(false);
 
     // Redirect authenticated users ONCE - prevent loops
     // MUST be called before any early returns (React hooks rule)
