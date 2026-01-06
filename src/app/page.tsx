@@ -21,8 +21,28 @@ export default function LandingPage() {
         );
     }
 
-    // Don't auto-redirect - let authenticated users see landing page with "Explore Museums" button
-    // They can click to go to /home if they want
+    // Redirect authenticated users to home page (only once)
+    useEffect(() => {
+        if (isLoaded && isSignedIn) {
+            // Small delay to ensure state is stable
+            const timer = setTimeout(() => {
+                router.replace("/home");
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [isLoaded, isSignedIn, router]);
+
+    // Show loading while checking auth status for redirect
+    if (isLoaded && isSignedIn) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading dashboard...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
