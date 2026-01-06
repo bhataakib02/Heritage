@@ -13,7 +13,7 @@ function LayoutProviders({ children }: { children: React.ReactNode }) {
     const menusForAdmin = [
         {
             title: "Home",
-            path: "/",
+            path: "/home",
         },
         {
             title: "Dashboard",
@@ -40,7 +40,7 @@ function LayoutProviders({ children }: { children: React.ReactNode }) {
     const menusForUser = [
         {
             title: "Home",
-            path: "/",
+            path: "/home",
         },
 
         {
