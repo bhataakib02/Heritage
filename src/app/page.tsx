@@ -131,15 +131,12 @@ export default function LandingPage() {
         );
     }
 
-    // Get featured museums - prioritize those with images, always show 3
-    const museumsWithImages = events.filter(e => e.images && e.images.length > 0);
-    const museumsWithoutImages = events.filter(e => !e.images || e.images.length === 0);
-    
-    // Combine: first take museums with images, then fill with others if needed
-    const displayMuseums = [
-        ...museumsWithImages.slice(0, 3),
-        ...museumsWithoutImages.slice(0, Math.max(0, 3 - museumsWithImages.length))
-    ].slice(0, 3);
+    // Featured museum images - always show these 3 beautiful museum images from public folder
+    const featuredMuseumImages = [
+        '/images/museums/museum1.jpg', // Grand museum interior
+        '/images/museums/museum2.jpg', // Natural history museum
+        '/images/museums/museum3.jpg'  // Museum exhibit hall
+    ];
 
     return (
         <div className="min-h-screen bg-white">
@@ -180,49 +177,24 @@ export default function LandingPage() {
                         </div>
                     </div>
 
-                    {/* Featured Museum Images - Always show 3 images only */}
+                    {/* Featured Museum Images - Always show 3 beautiful museum images */}
                     <div className="max-w-6xl mx-auto mt-12">
                         <div className="grid md:grid-cols-3 gap-4">
-                            {displayMuseums.length > 0 ? (
-                                displayMuseums.map((museum, index) => {
-                                    const imageUrl = museum.images?.[0] || 
-                                                   'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&h=600&fit=crop' ||
-                                                   '/placeholder-image.jpg';
-                                    return (
-                                        <div
-                                            key={museum.id || museum._id || index}
-                                            className="relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer"
-                                        >
-                                            <div className="aspect-video bg-gray-200 overflow-hidden">
-                                                <img
-                                                    src={imageUrl}
-                                                    alt={museum.name || 'Museum'}
-                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                                                    onError={(e) => {
-                                                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&h=600&fit=crop';
-                                                    }}
-                                                />
-                                            </div>
-                                        </div>
-                                    );
-                                })
-                            ) : (
-                                // Show placeholder images if no museums
-                                [...Array(3)].map((_, index) => (
-                                    <div
-                                        key={index}
-                                        className="relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105"
-                                    >
-                                        <div className="aspect-video bg-gray-200 overflow-hidden">
-                                            <img
-                                                src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&h=600&fit=crop"
-                                                alt="Museum"
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
+                            {featuredMuseumImages.map((imageUrl, index) => (
+                                <div
+                                    key={index}
+                                    className="relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer"
+                                >
+                                    <div className="aspect-video bg-gray-200 overflow-hidden">
+                                        <img
+                                            src={imageUrl}
+                                            alt={`Museum ${index + 1}`}
+                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                            loading="lazy"
+                                        />
                                     </div>
-                                ))
-                            )}
+                                </div>
+                            ))}
                         </div>
                     </div>
 
