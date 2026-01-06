@@ -10,9 +10,27 @@ import React from "react";
 connectDB();
 async function BookingsPage() {
   const userId = await getUserIdOfLoggedInUser();
-  const bookings = await BookingModel.find({
-    user: userId,
-  });
+  
+  if (!userId) {
+    return (
+      <div>
+        <PageTitle title="My Bookings" />
+        <div className="mt-5 text-center">
+          <h1 className="text-gray-700">Please sign in to view your bookings.</h1>
+        </div>
+      </div>
+    );
+  }
+  
+  let bookings = [];
+  try {
+    bookings = await BookingModel.find({
+      user: userId,
+    });
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+    bookings = [];
+  }
   
   // Populate events manually (Supabase doesn't have .populate())
   const eventIds = Array.from(new Set(bookings.map((b: any) => b.event).filter(Boolean)));
