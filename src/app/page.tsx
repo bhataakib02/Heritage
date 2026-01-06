@@ -472,7 +472,7 @@ export default function LandingPage() {
             </section>
 
             {/* CTA Section */}
-            <section className="py-16 md:py-24 bg-white">
+            <section className="py-16 md:py-24 bg-gradient-to-br from-gray-50 via-white to-gray-50">
                 <div className="container mx-auto px-6 text-center">
                     <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                         Ready to Explore?
